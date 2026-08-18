@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import urveoLogo from "./assets/urveo-logo.png";
 
@@ -19,14 +19,21 @@ const services = [
   { icon: "server", number: "04", title: "Backend riešenia", text: "Stabilné API, integrácie a systémy, ktoré bezpečne držia váš digitálny produkt pohromade." },
 ];
 
+const processSteps = [
+  { number: "01", title: "Nápad", text: "Povieme si, čo chcete vytvoriť, pre koho je produkt určený a aký problém má riešiť." },
+  { number: "02", title: "Návrh", text: "Navrhneme štruktúru, funkcie a vizuálny smer tak, aby všetko dávalo zmysel ešte pred vývojom." },
+  { number: "03", title: "Vývoj", text: "Produkt naprogramujeme, priebežne testujeme a ukazujeme vám reálny progres." },
+  { number: "04", title: "Spustenie", text: "Nasadíme hotové riešenie, doladíme detaily a podľa potreby pokračujeme v ďalšom rozvoji." },
+];
+
 const projects = [
   { title: "D•ART", tag: "Mobile · Platform", text: "Mobilná aplikácia a administračný systém pre reštauráciu s vlastným rozvozom.", visual: "dart" },
   { title: "Nexa", tag: "Web · Digital identity", text: "Digitálna identita a konverzný web pre progresívnu technologickú spoločnosť.", visual: "nexa" },
   { title: "Aether", tag: "E-commerce · Experience", text: "Minimalistický nákupný zážitok s dôrazom na rýchlosť a bezproblémový checkout.", visual: "aether" },
 ];
 
-function Logo() {
-  return <span className="logo" aria-label="URVEO"><span className="logo-left">UR</span><span className="logo-v">V</span><span className="logo-right">EO</span></span>;
+function Logo({ className = "" }) {
+  return <img className={`brand-logo ${className}`.trim()} src={urveoLogo} alt="URVEO" />;
 }
 
 function ProductVisual() {
@@ -54,14 +61,105 @@ function ProductVisual() {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const activeNavigationSweepRef = useRef(null);
+  const navigationFrameRef = useRef(null);
+  const navigationSweepDelayRef = useRef(null);
+  const navigationSweepTimeoutRef = useRef(null);
   const closeMenu = () => setMenuOpen(false);
-  return (
-    <main>
-      <header className="site-header"><a href="#home" onClick={closeMenu}><img src={urveoLogo} alt="URVEO" style={{ display: "block", width: "auto", height: 30, objectFit: "contain" }} /></a><nav className={menuOpen ? "open" : ""} aria-label="Hlavná navigácia">{[["home","Domov"],["services","Služby"],["projects","Naše práce"],["about","O nás"],["contact","Kontakt"]].map(([id,label]) => <a key={id} href={`#${id}`} onClick={closeMenu}>{label}</a>)}</nav><a href="#contact" className="nav-cta">Začať projekt <span>↗</span></a><button className={`menu-toggle ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Otvoriť menu" aria-expanded={menuOpen}><i/><i/></button></header>
 
-      <section className="hero" id="home"><div className="hero-ambient"/><div className="hero-copy"><p className="eyebrow"><span/>DIGITÁLNE PRODUKTY. PRECÍZNE VYTVORENÉ.</p><h1>Tvoríme digitálne<br/>produkty, ktoré<br/><span>posúvajú biznis.</span></h1><p className="hero-description">Navrhujeme a vyvíjame výnimočné digitálne riešenia — od prvého konceptu až po produkt, ktorý rastie s vami.</p><div className="hero-actions"><a className="button-primary" href="#contact">Začať projekt <span>↗</span></a><a className="button-link" href="#projects">Pozrieť naše práce <span>↓</span></a></div><div className="hero-proof"><div className="proof-avatars"><i>U</i><i>R</i><i>V</i></div><p><strong>Partner pre digitálny rast</strong><span>Stratégia · Dizajn · Technológie</span></p></div></div><ProductVisual /></section>
+  const navigateToSection = (event, id) => {
+    event.preventDefault();
+    closeMenu();
+
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    window.history.pushState(null, "", `#${id}`);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      target.classList.add("is-visible");
+      target.scrollIntoView();
+      return;
+    }
+
+    window.cancelAnimationFrame(navigationFrameRef.current);
+    window.clearTimeout(navigationSweepDelayRef.current);
+    window.clearTimeout(navigationSweepTimeoutRef.current);
+    if (activeNavigationSweepRef.current) {
+      activeNavigationSweepRef.current.classList.remove("is-navigation-light-sweep");
+      activeNavigationSweepRef.current.classList.remove("is-navigation-light-sweep-pending");
+      activeNavigationSweepRef.current = null;
+    }
+    activeNavigationSweepRef.current = target;
+    target.classList.add("is-navigation-light-sweep-pending");
+    target.classList.add("is-visible");
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    let lastTop = target.getBoundingClientRect().top;
+    let stableSince = null;
+    const revealWhenSettled = (time) => {
+      const top = target.getBoundingClientRect().top;
+      const isVisible = top < window.innerHeight * 0.85 && target.getBoundingClientRect().bottom > window.innerHeight * 0.15;
+      const isStable = Math.abs(top - lastTop) < 0.5;
+
+      stableSince = isVisible && isStable ? (stableSince ?? time) : null;
+      lastTop = top;
+      if (stableSince !== null && time - stableSince >= 140) {
+        navigationSweepDelayRef.current = window.setTimeout(() => {
+          target.classList.remove("is-navigation-light-sweep-pending");
+          target.classList.add("is-navigation-light-sweep");
+          navigationSweepTimeoutRef.current = window.setTimeout(() => {
+            target.classList.remove("is-navigation-light-sweep");
+            if (activeNavigationSweepRef.current === target) {
+              activeNavigationSweepRef.current = null;
+            }
+          }, 2000);
+        }, 300);
+        return;
+      }
+      navigationFrameRef.current = window.requestAnimationFrame(revealWhenSettled);
+    };
+    navigationFrameRef.current = window.requestAnimationFrame(revealWhenSettled);
+  };
+
+  const handleHeaderNavigation = (event) => {
+    const link = event.target.closest(".site-header a[href^='#']");
+    if (!link) return;
+    navigateToSection(event, link.hash.slice(1));
+  };
+
+  useEffect(() => {
+    const sections = document.querySelectorAll(".section, .hero");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (activeNavigationSweepRef.current === entry.target) return;
+          entry.target.classList.add("is-visible");
+        }
+      });
+    }, { threshold: 0.3, rootMargin: "0px 0px -15% 0px" });
+
+    sections.forEach((section) => observer.observe(section));
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(navigationFrameRef.current);
+      window.clearTimeout(navigationSweepDelayRef.current);
+      window.clearTimeout(navigationSweepTimeoutRef.current);
+      if (activeNavigationSweepRef.current) {
+        activeNavigationSweepRef.current.classList.remove("is-navigation-light-sweep");
+        activeNavigationSweepRef.current.classList.remove("is-navigation-light-sweep-pending");
+      }
+    };
+  }, []);
+  return (
+    <main onClick={handleHeaderNavigation}>
+      <header className="site-header"><a className="header-brand" href="#home" onClick={closeMenu}><Logo className="header-logo" /></a><nav className={menuOpen ? "open" : ""} aria-label="Hlavná navigácia">{[["home","Domov"],["services","Služby"],["projects","Naše práce"],["about","O nás"],["contact","Kontakt"]].map(([id,label]) => <a key={id} href={`#${id}`} onClick={closeMenu}>{label}</a>)}</nav><a href="#contact" className="nav-cta">Začať projekt <span>↗</span></a><button className={`menu-toggle ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Otvoriť menu" aria-expanded={menuOpen}><i/><i/></button></header>
+
+      <section className="hero" id="home"><div className="hero-ambient"/><div className="hero-copy"><p className="eyebrow"><span/>DIGITÁLNE PRODUKTY. PRECÍZNE VYTVORENÉ.</p><h1>Tvoríme digitálne<br/>produkty, ktoré<br/><span>posúvajú biznis.</span></h1><p className="hero-description">Navrhujeme a vyvíjame výnimočné digitálne riešenia — od prvého konceptu až po produkt, ktorý rastie s vami.</p><div className="hero-actions"><a className="button-primary" href="#contact">Začať projekt <span>↗</span></a><a className="button-link" href="#projects">Pozrieť naše práce <span>↓</span></a></div><div className="hero-proof"><Logo className="hero-logo" /></div></div><ProductVisual /></section>
 
       <section className="services section" id="services"><div className="section-intro"><div><p className="eyebrow"><span/>ČO TVORÍME</p><h2>Od nápadu po <span>digitálny produkt.</span></h2></div><p>Spájame premyslený dizajn so spoľahlivou technológiou. Výsledkom sú produkty, ktoré nielen dobre vyzerajú, ale prinášajú hodnotu.</p></div><div className="service-grid">{services.map(service => <article className="service-card" key={service.title}><div className="card-top"><div className="service-icon"><Icon name={service.icon}/></div><span>{service.number}</span></div><h3>{service.title}</h3><p>{service.text}</p><a href="#contact" aria-label={`${service.title} – viac informácií`}>Zistiť viac <span>↗</span></a></article>)}</div></section>
+
+      <section className="process section" aria-labelledby="process-heading"><div className="process-intro"><p className="eyebrow"><span/>AKO PRACUJEME</p><h2 id="process-heading">Od prvého nápadu až po <span>spustenie.</span></h2></div><div className="process-steps">{processSteps.map(step => <article className="process-step" key={step.number}><span className="process-number">{step.number}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></article>)}</div><p className="process-note">Máte iba nápad? To stačí. <span>Zvyšok môžeme vyriešiť spolu.</span></p></section>
 
       <section className="projects section" id="projects"><div className="section-intro projects-intro"><div><p className="eyebrow"><span/>VYBRANÉ PROJEKTY</p><h2>Práca, ktorá má <span>výsledky.</span></h2></div><a className="button-link" href="#contact">Všetky projekty <span>↗</span></a></div><div className="project-list">{projects.map((project, index) => <article className="project-card" key={project.title}><div className={`project-visual ${project.visual}`}><span className="project-index">0{index+1}</span>{project.visual === "dart" && <div className="phone-mock"><div className="phone-screen"><small>D•ART</small><div className="food-orb">D</div><strong>Discover taste.</strong><i/></div></div>}{project.visual === "nexa" && <div className="nexa-mark"><i/><span>N</span><i/></div>}{project.visual === "aether" && <div className="aether-shape"><i/><i/><i/></div>}<div className="visual-noise"/></div><div className="project-info"><p>{project.tag}</p><h3>{project.title}</h3><span>{project.text}</span><a href="#contact">Detail projektu <b>↗</b></a></div></article>)}</div></section>
 
@@ -69,7 +167,7 @@ function App() {
 
       <section className="contact section" id="contact"><div className="contact-orb"/><p className="eyebrow"><span/>MÁTE NÁPAD?</p><h2>Vytvorme niečo<br/><span>výnimočné.</span></h2><p className="contact-copy">Povedzte nám o svojom projekte. Ozveme sa vám a spoločne nájdeme najlepšiu cestu vpred.</p><a href="mailto:info@urveo.sk" className="button-primary large">Napísať nám <span>↗</span></a><p className="contact-email">info@urveo.sk</p></section>
 
-      <footer><div className="footer-brand"><Logo/><p>Digitálne produkty vytvorené pre rast.</p></div><div className="footer-links"><div><small>NAVIGÁCIA</small><a href="#services">Služby</a><a href="#projects">Projekty</a><a href="#about">O nás</a></div><div><small>KONTAKT</small><a href="mailto:info@urveo.sk">info@urveo.sk</a><a href="#contact">Bratislava, SK</a></div></div><div className="footer-bottom"><span>© 2026 URVEO. Všetky práva vyhradené.</span><span>Made with precision.</span></div></footer>
+      <footer><div className="footer-brand"><Logo className="footer-logo"/><p>Digitálne produkty vytvorené pre rast.</p></div><div className="footer-links"><div><small>NAVIGÁCIA</small><a href="#services">Služby</a><a href="#projects">Projekty</a><a href="#about">O nás</a></div><div><small>KONTAKT</small><a href="mailto:info@urveo.sk">info@urveo.sk</a><a href="#contact">Bratislava, SK</a></div></div><div className="footer-bottom"><span>© 2026 URVEO. Všetky práva vyhradené.</span><span>Made with precision.</span></div></footer>
     </main>
   );
 }
