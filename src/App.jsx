@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import urveoLogo from "./assets/urveo-logo.png";
+import DArtExperience from "./DArtExperience";
 
 const Icon = ({ name }) => {
   const paths = {
@@ -24,12 +25,6 @@ const processSteps = [
   { number: "02", title: "Návrh", text: "Navrhneme štruktúru, funkcie a vizuálny smer tak, aby všetko dávalo zmysel ešte pred vývojom." },
   { number: "03", title: "Vývoj", text: "Produkt naprogramujeme, priebežne testujeme a ukazujeme vám reálny progres." },
   { number: "04", title: "Spustenie", text: "Nasadíme hotové riešenie, doladíme detaily a podľa potreby pokračujeme v ďalšom rozvoji." },
-];
-
-const projects = [
-  { title: "D•ART", tag: "Mobile · Platform", text: "Mobilná aplikácia a administračný systém pre reštauráciu s vlastným rozvozom.", visual: "dart" },
-  { title: "Nexa", tag: "Web · Digital identity", text: "Digitálna identita a konverzný web pre progresívnu technologickú spoločnosť.", visual: "nexa" },
-  { title: "Aether", tag: "E-commerce · Experience", text: "Minimalistický nákupný zážitok s dôrazom na rýchlosť a bezproblémový checkout.", visual: "aether" },
 ];
 
 function Logo({ className = "" }) {
@@ -59,8 +54,56 @@ function ProductVisual() {
   );
 }
 
+function DArtAdminSurface() {
+  return (
+    <div className="dart-admin-surface" aria-hidden="true">
+      <div className="dart-admin-grid"/>
+      <div className="dart-admin-rail"><i/><i/><i/><i/></div>
+      <div className="dart-admin-geometry">
+        <div className="dart-abstract-heading"><i/><i/></div>
+        <div className="dart-abstract-panels"><i/><i/><i/></div>
+        <div className="dart-abstract-data"><span/><span/><span/><span/><span/></div>
+      </div>
+    </div>
+  );
+}
+
+function DArtMobileSurface() {
+  return (
+    <div className="dart-mobile-surface" aria-hidden="true">
+      <div className="dart-mobile-glow"/>
+      <div className="dart-mobile-topline"><i/><i/></div>
+      <div className="dart-mobile-hero"><span/><span/></div>
+      <div className="dart-mobile-lines"><i/><i/><i/></div>
+      <div className="dart-mobile-cells"><span/><span/></div>
+      <div className="dart-mobile-dock"><i/><i/><i/></div>
+    </div>
+  );
+}
+
+function DArtProductVisual() {
+  return (
+    <div className="dart-product-visual" aria-label="Prepojený produktový ekosystém mobilnej aplikácie, administrácie a API">
+      <div className="dart-ambient"/>
+      <div className="dart-connection" aria-hidden="true"><i/><i/><i/></div>
+      <div className="dart-admin">
+        <div className="dart-admin-screen" data-dart-media="admin"><DArtAdminSurface/></div>
+        <div className="dart-admin-stand" aria-hidden="true"/>
+      </div>
+      <div className="dart-phone">
+        <div className="dart-phone-screen" data-dart-media="mobile"><DArtMobileSurface/></div>
+      </div>
+      <span className="dart-ecosystem-label dart-label-admin">ADMIN</span>
+      <span className="dart-ecosystem-label dart-label-mobile">MOBILE</span>
+      <span className="dart-ecosystem-label dart-label-api">API</span>
+      <div className="visual-noise"/>
+    </div>
+  );
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dartOpen, setDartOpen] = useState(false);
   const activeNavigationSweepRef = useRef(null);
   const navigationFrameRef = useRef(null);
   const navigationSweepDelayRef = useRef(null);
@@ -161,13 +204,14 @@ function App() {
 
       <section className="process section" aria-labelledby="process-heading"><div className="process-intro"><p className="eyebrow"><span/>AKO PRACUJEME</p><h2 id="process-heading">Od prvého nápadu až po <span>spustenie.</span></h2></div><div className="process-steps">{processSteps.map(step => <article className="process-step" key={step.number}><span className="process-number">{step.number}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></article>)}</div><p className="process-note">Máte iba nápad? To stačí. <span>Zvyšok môžeme vyriešiť spolu.</span></p></section>
 
-      <section className="projects section" id="projects"><div className="section-intro projects-intro"><div><p className="eyebrow"><span/>VYBRANÉ PROJEKTY</p><h2>Práca, ktorá má <span>výsledky.</span></h2></div><a className="button-link" href="#contact">Všetky projekty <span>↗</span></a></div><div className="project-list">{projects.map((project, index) => <article className="project-card" key={project.title}><div className={`project-visual ${project.visual}`}><span className="project-index">0{index+1}</span>{project.visual === "dart" && <div className="phone-mock"><div className="phone-screen"><small>D•ART</small><div className="food-orb">D</div><strong>Discover taste.</strong><i/></div></div>}{project.visual === "nexa" && <div className="nexa-mark"><i/><span>N</span><i/></div>}{project.visual === "aether" && <div className="aether-shape"><i/><i/><i/></div>}<div className="visual-noise"/></div><div className="project-info"><p>{project.tag}</p><h3>{project.title}</h3><span>{project.text}</span><a href="#contact">Detail projektu <b>↗</b></a></div></article>)}</div></section>
+      <section className="projects section" id="projects"><div className="project-heading"><p className="eyebrow"><span/>VYBRANÝ PROJEKT</p></div><article className="featured-project"><div className="featured-project-copy"><p className="project-kicker">D•ART / DIGITÁLNY PRODUKT</p><h2>D•ART</h2><p className="project-subtitle">Reštauračná platforma na mieru</p><p className="project-description">Komplexné digitálne riešenie pre reštauráciu s vlastným objednávkovým systémom. Mobilná aplikácia, objednávkový proces, administrácia a backend fungujú ako jeden prepojený produkt.</p><ul className="project-capabilities" aria-label="Schopnosti projektu"><li>Mobilná aplikácia</li><li>Objednávkový systém</li><li>Admin rozhranie</li><li>Backend &amp; API</li></ul><button className="project-cta" onClick={() => setDartOpen(true)}>Vyskúšať projekt <span aria-hidden="true">↗</span></button></div><DArtProductVisual/></article></section>
 
       <section className="about section" id="about"><div className="about-glow"/><div><p className="eyebrow"><span/>PREČO URVEO</p><h2>Menej hluku.<br/><span>Viac podstaty.</span></h2></div><div className="about-content"><p>Nie sme len dodávateľ. Sme partner, ktorý rozumie vášmu biznisu a pretaví jeho potenciál do digitálneho produktu.</p><div className="principles"><div><strong>01</strong><span>Premyslené do detailu</span></div><div><strong>02</strong><span>Postavené pre rast</span></div><div><strong>03</strong><span>Komunikácia bez bariér</span></div></div></div></section>
 
       <section className="contact section" id="contact"><div className="contact-orb"/><p className="eyebrow"><span/>MÁTE NÁPAD?</p><h2>Vytvorme niečo<br/><span>výnimočné.</span></h2><p className="contact-copy">Povedzte nám o svojom projekte. Ozveme sa vám a spoločne nájdeme najlepšiu cestu vpred.</p><a href="mailto:info@urveo.sk" className="button-primary large">Napísať nám <span>↗</span></a><p className="contact-email">info@urveo.sk</p></section>
 
       <footer><div className="footer-brand"><Logo className="footer-logo"/><p>Digitálne produkty vytvorené pre rast.</p></div><div className="footer-links"><div><small>NAVIGÁCIA</small><a href="#services">Služby</a><a href="#projects">Projekty</a><a href="#about">O nás</a></div><div><small>KONTAKT</small><a href="mailto:info@urveo.sk">info@urveo.sk</a><a href="#contact">Bratislava, SK</a></div></div><div className="footer-bottom"><span>© 2026 URVEO. Všetky práva vyhradené.</span><span>Made with precision.</span></div></footer>
+      {dartOpen && <DArtExperience onClose={() => setDartOpen(false)}/>}
     </main>
   );
 }
