@@ -55,7 +55,7 @@ export default function DArtExperience({ onClose }) {
 
   return <div className="case-experience">
     <div className="case-glow"/><button className="case-back" onClick={onClose}>← <span>Späť na URVEO</span></button>
-    <div className="case-title"><p className="eyebrow"><span/>INTERAKTÍVNY PROJEKT</p><h1>D•ART</h1><p>Interaktívna ukážka aplikácie</p><small>Vyskúšajte si zjednodušenú ukážku objednávkového procesu priamo v prehliadači.</small></div>
+    <div className="case-title"><p className="eyebrow"><span><i className="eyebrow-line"/></span>INTERAKTÍVNY PROJEKT</p><h1>D•ART</h1><p>Interaktívna ukážka aplikácie</p><small>Vyskúšajte si zjednodušenú ukážku objednávkového procesu priamo v prehliadači.</small></div>
     <div className="case-layout">
       <div className="case-context" key={screen}><span>0{screen + 1} / 05</span><h2>{copy[screen][0]}</h2><p>{copy[screen][1]}</p><small>INTERAKTÍVNY PROTOTYP · DEMO OBSAH</small></div>
       <div className="phone-column">
