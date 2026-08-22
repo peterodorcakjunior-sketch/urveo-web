@@ -55,9 +55,9 @@ export default function DArtExperience({ onClose }) {
 
   return <div className="case-experience">
     <div className="case-glow"/><button className="case-back" onClick={onClose}>← <span>Späť na URVEO</span></button>
-    <div className="case-title"><p className="eyebrow"><span><i className="eyebrow-line"/></span>INTERAKTÍVNY PROJEKT</p><h1>D•ART</h1><p>Interaktívna ukážka aplikácie</p><small>Vyskúšajte si zjednodušenú ukážku objednávkového procesu priamo v prehliadači.</small></div>
+    <div className="case-title"><p className="eyebrow"><span><i className="eyebrow-line"/></span>INTERAKTÍVNY PROJEKT</p><h2>D•ART</h2><p>Interaktívna ukážka aplikácie</p><small>Vyskúšajte si zjednodušenú ukážku objednávkového procesu priamo v prehliadači.</small></div>
     <div className="case-layout">
-      <div className="case-context" key={screen}><span>0{screen + 1} / 05</span><h2>{copy[screen][0]}</h2><p>{copy[screen][1]}</p><small>INTERAKTÍVNY PROTOTYP · DEMO OBSAH</small></div>
+      <div className="case-context" key={screen}><span>0{screen + 1} / 05</span><h3>{copy[screen][0]}</h3><p>{copy[screen][1]}</p><small>INTERAKTÍVNY PROTOTYP · DEMO OBSAH</small></div>
       <div className="phone-column">
         <DartDevice><DartInteractiveDemo>
           {screen === 0 && <div className="app-page home-screen"><PhoneHeader cartCount={cartCount}/><div className="welcome"><small>VITAJTE V D•ART</small><h3>Čo si dáte dnes?</h3><p>Vyberte si z našej demo ponuky.</p></div><div className="category-row">{categories.map(cat => <button key={cat} onClick={() => { setCategory(cat); setScreen(1); }}>{cat}</button>)}</div><div className="featured-label"><b>Obľúbené</b><span>Demo ponuka</span></div><div className="featured-cards">{products.slice(0,3).map(item => <button key={item.id} onClick={() => goProduct(item)}><FoodVisual tone={item.tone}/><span>{item.name}</span><b>{money(item.price)}</b></button>)}</div><button className="app-primary" onClick={() => setScreen(1)}>Pozrieť menu <span>→</span></button></div>}
