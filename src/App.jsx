@@ -123,7 +123,7 @@ const contactInterestOptions = ["Web", "Mobilná aplikácia", "E-commerce", "Bac
 function ContactSection() {
   const [values, setValues] = useState({ name: "", email: "", interest: "", message: "" });
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState("idle");
 
   const updateField = (event) => {
     const { name, value } = event.target;
@@ -131,7 +131,7 @@ function ContactSection() {
     if (errors[name]) setErrors(current => ({ ...current, [name]: "" }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {};
     if (!values.name.trim()) nextErrors.name = "Zadajte, prosím, vaše meno.";
@@ -139,13 +139,34 @@ function ContactSection() {
     if (!values.interest) nextErrors.interest = "Vyberte, o čo máte záujem.";
     if (!values.message.trim()) nextErrors.message = "Napíšte nám stručne o vašom projekte.";
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length === 0) setSubmitted(true);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setSubmitStatus("submitting");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          email: values.email.trim(),
+          interest: values.interest,
+          message: values.message.trim(),
+        }),
+      });
+
+      const result = await response.json().catch(() => null);
+      if (!response.ok || result?.ok !== true) throw new Error("Contact request failed");
+      setSubmitStatus("success");
+    } catch {
+      setSubmitStatus("error");
+    }
   };
 
   const resetForm = () => {
     setValues({ name: "", email: "", interest: "", message: "" });
     setErrors({});
-    setSubmitted(false);
+    setSubmitStatus("idle");
   };
 
   const fieldProps = (name) => ({
@@ -157,7 +178,7 @@ function ContactSection() {
   });
 
   return (
-    <section className={`contact section${submitted ? " contact-submitted" : ""}`} id="contact" aria-labelledby="contact-heading">
+    <section className={`contact section${submitStatus === "success" ? " contact-submitted" : ""}`} id="contact" aria-labelledby="contact-heading">
       <div className="contact-orb"/>
       <div className="contact-intro">
         <p className="eyebrow"><span><i className="eyebrow-line"/></span>KONTAKT</p>
@@ -171,7 +192,7 @@ function ContactSection() {
       </div>
 
       <div className="contact-form-area">
-        {!submitted ? (
+        {submitStatus !== "success" ? (
           <form className="contact-form" onSubmit={handleSubmit} noValidate>
             <div className="contact-field">
               <label htmlFor="contact-name">Meno</label>
@@ -198,15 +219,19 @@ function ContactSection() {
               <textarea id="contact-message" rows="4" placeholder="Čo chcete vytvoriť?" {...fieldProps("message")}/>
               {errors.message && <p className="contact-error" id="contact-message-error" role="alert">{errors.message}</p>}
             </div>
-            {/* Future integration point: privacy consent, GDPR copy and backend submission belong here. */}
-            <button className="button-primary contact-submit" type="submit">Odoslať dopyt <span aria-hidden="true">→</span></button>
+            {submitStatus === "error" && (
+              <p className="contact-error" role="alert">Dopyt sa nepodarilo odoslať. Skúste to prosím znova.</p>
+            )}
+            <button className="button-primary contact-submit" type="submit" disabled={submitStatus === "submitting"}>
+              {submitStatus === "submitting" ? "Odosielam…" : <>Odoslať dopyt <span aria-hidden="true">→</span></>}
+            </button>
           </form>
         ) : (
           <div className="contact-success" role="status" aria-live="polite">
             <div className="contact-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6.5 12.5 3.5 3.5 7.5-8"/></svg></div>
             <h3>Ďakujeme.</h3>
-            <p className="contact-success-title">Dopyt je pripravený na odoslanie.</p>
-            <p>Kontaktný formulár bude pred ostrým spustením napojený na firemný e-mail URVEO.</p>
+            <p className="contact-success-title">Dopyt bol úspešne odoslaný.</p>
+            <p>Ozveme sa vám čo najskôr.</p>
             <button type="button" className="contact-reset" onClick={resetForm}>Napísať ďalší dopyt <span aria-hidden="true">↗</span></button>
           </div>
         )}
