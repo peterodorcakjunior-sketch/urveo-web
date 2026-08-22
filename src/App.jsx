@@ -118,14 +118,135 @@ function DArtProductVisual() {
   );
 }
 
+const contactInterestOptions = ["Web", "Mobilná aplikácia", "E-commerce", "Backend / systém", "Kompletné riešenie", "Iné"];
+
+function ContactSection() {
+  const [values, setValues] = useState({ name: "", email: "", interest: "", message: "" });
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const updateField = (event) => {
+    const { name, value } = event.target;
+    setValues(current => ({ ...current, [name]: value }));
+    if (errors[name]) setErrors(current => ({ ...current, [name]: "" }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const nextErrors = {};
+    if (!values.name.trim()) nextErrors.name = "Zadajte, prosím, vaše meno.";
+    if (!/^\S+@\S+\.\S+$/.test(values.email.trim())) nextErrors.email = "Zadajte platnú e-mailovú adresu.";
+    if (!values.interest) nextErrors.interest = "Vyberte, o čo máte záujem.";
+    if (!values.message.trim()) nextErrors.message = "Napíšte nám stručne o vašom projekte.";
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length === 0) setSubmitted(true);
+  };
+
+  const resetForm = () => {
+    setValues({ name: "", email: "", interest: "", message: "" });
+    setErrors({});
+    setSubmitted(false);
+  };
+
+  const fieldProps = (name) => ({
+    name,
+    value: values[name],
+    onChange: updateField,
+    "aria-invalid": Boolean(errors[name]),
+    "aria-describedby": errors[name] ? `contact-${name}-error` : undefined,
+  });
+
+  return (
+    <section className={`contact section${submitted ? " contact-submitted" : ""}`} id="contact" aria-labelledby="contact-heading">
+      <div className="contact-orb"/>
+      <div className="contact-intro">
+        <p className="eyebrow"><span><i className="eyebrow-line"/></span>KONTAKT</p>
+        <h2 id="contact-heading">Máte nápad?<br/>Poďme ho premeniť na<br/><span>digitálny produkt.</span></h2>
+        <p className="contact-copy">Web, aplikácia alebo riešenie na mieru. Napíšte nám pár slov o projekte a ozveme sa vám.</p>
+        <div className="contact-details">
+          <p>Napíšte nám o vašom projekte.</p>
+          {/* TEMPORARY: Replace with the final professional URVEO domain email before launch. */}
+          <a href="mailto:hello@urveo.sk">hello@urveo.sk <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+
+      <div className="contact-form-area">
+        {!submitted ? (
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
+            <div className="contact-field">
+              <label htmlFor="contact-name">Meno</label>
+              <input id="contact-name" type="text" autoComplete="name" placeholder="Vaše meno" {...fieldProps("name")}/>
+              {errors.name && <p className="contact-error" id="contact-name-error" role="alert">{errors.name}</p>}
+            </div>
+            <div className="contact-field">
+              <label htmlFor="contact-email">E-mail</label>
+              <input id="contact-email" type="email" autoComplete="email" inputMode="email" placeholder="vas@email.sk" {...fieldProps("email")}/>
+              {errors.email && <p className="contact-error" id="contact-email-error" role="alert">{errors.email}</p>}
+            </div>
+            <div className="contact-field">
+              <label htmlFor="contact-interest">O čo máte záujem?</label>
+              <div className="contact-select-wrap">
+                <select id="contact-interest" {...fieldProps("interest")}>
+                  <option value="" disabled>Vyberte možnosť</option>
+                  {contactInterestOptions.map(option => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </div>
+              {errors.interest && <p className="contact-error" id="contact-interest-error" role="alert">{errors.interest}</p>}
+            </div>
+            <div className="contact-field">
+              <label htmlFor="contact-message">Povedzte nám stručne o projekte</label>
+              <textarea id="contact-message" rows="4" placeholder="Čo chcete vytvoriť?" {...fieldProps("message")}/>
+              {errors.message && <p className="contact-error" id="contact-message-error" role="alert">{errors.message}</p>}
+            </div>
+            {/* Future integration point: privacy consent, GDPR copy and backend submission belong here. */}
+            <button className="button-primary contact-submit" type="submit">Odoslať dopyt <span aria-hidden="true">→</span></button>
+          </form>
+        ) : (
+          <div className="contact-success" role="status" aria-live="polite">
+            <div className="contact-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6.5 12.5 3.5 3.5 7.5-8"/></svg></div>
+            <h3>Ďakujeme.</h3>
+            <p className="contact-success-title">Dopyt je pripravený na odoslanie.</p>
+            <p>Kontaktný formulár bude pred ostrým spustením napojený na firemný e-mail URVEO.</p>
+            <button type="button" className="contact-reset" onClick={resetForm}>Napísať ďalší dopyt <span aria-hidden="true">↗</span></button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dartOpen, setDartOpen] = useState(false);
+  const menuButtonRef = useRef(null);
   const activeNavigationSweepRef = useRef(null);
   const navigationFrameRef = useRef(null);
   const navigationSweepDelayRef = useRef(null);
   const navigationSweepTimeoutRef = useRef(null);
   const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    const handleResize = () => {
+      if (window.innerWidth > 900) setMenuOpen(false);
+    };
+
+    document.body.classList.add("menu-open");
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      document.body.classList.remove("menu-open");
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [menuOpen]);
 
   const navigateToSection = (event, id) => {
     event.preventDefault();
@@ -213,7 +334,7 @@ function App() {
   }, []);
   return (
     <main onClick={handleHeaderNavigation}>
-      <header className="site-header"><a className="header-brand" href="#home" onClick={closeMenu}><Logo className="header-logo" /></a><nav className={menuOpen ? "open" : ""} aria-label="Hlavná navigácia">{[["home","Domov"],["services","Služby"],["projects","Naše práce"],["about","O nás"],["contact","Kontakt"]].map(([id,label]) => <a key={id} href={`#${id}`} onClick={closeMenu}>{label}</a>)}</nav><a href="#contact" className="nav-cta">Začať projekt <span>↗</span></a><button className={`menu-toggle ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Otvoriť menu" aria-expanded={menuOpen}><i/><i/></button></header>
+      <header className="site-header"><a className="header-brand" href="#home" onClick={closeMenu}><Logo className="header-logo" /></a><nav id="site-navigation" className={menuOpen ? "open" : ""} aria-label="Hlavná navigácia">{[["home","Domov"],["services","Služby"],["projects","Naše práce"],["about","O nás"],["contact","Kontakt"]].map(([id,label]) => <a key={id} href={`#${id}`} onClick={closeMenu}>{label}</a>)}</nav><a href="#contact" className="nav-cta">Začať projekt <span>↗</span></a><button ref={menuButtonRef} type="button" className={`menu-toggle ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(current => !current)} aria-label={menuOpen ? "Zavrieť menu" : "Otvoriť menu"} aria-controls="site-navigation" aria-expanded={menuOpen}><i/><i/></button></header>
 
       <section className="hero" id="home"><div className="hero-ambient"/><div className="hero-copy"><p className="eyebrow"><span><i className="eyebrow-line"/></span>DIGITÁLNE PRODUKTY. PRECÍZNE VYTVORENÉ.</p><h1>Tvoríme digitálne<br/>produkty, ktoré<br/><span>posúvajú biznis.</span></h1><p className="hero-description">Navrhujeme a vyvíjame výnimočné digitálne riešenia — od prvého konceptu až po produkt, ktorý rastie s vami.</p><div className="hero-actions"><a className="button-primary" href="#contact">Začať projekt <span>↗</span></a><a className="button-link" href="#projects">Pozrieť naše práce <span>↓</span></a></div><div className="hero-proof"><Logo className="hero-logo" /></div></div><ProductVisual /></section>
 
@@ -225,7 +346,7 @@ function App() {
 
       <section className="about section" id="about"><div className="about-glow"/><div><p className="eyebrow"><span><i className="eyebrow-line"/></span>PREČO URVEO</p><h2>Menej hluku.<br/><span>Viac podstaty.</span></h2></div><div className="about-content"><p>Nie sme len dodávateľ. Sme partner, ktorý rozumie vášmu biznisu a pretaví jeho potenciál do digitálneho produktu.</p><div className="principles"><div><strong>01</strong><span>Premyslené do detailu</span></div><div><strong>02</strong><span>Postavené pre rast</span></div><div><strong>03</strong><span>Komunikácia bez bariér</span></div></div></div></section>
 
-      <section className="contact section" id="contact"><div className="contact-orb"/><p className="eyebrow"><span><i className="eyebrow-line"/></span>MÁTE NÁPAD?</p><h2>Vytvorme niečo<br/><span>výnimočné.</span></h2><p className="contact-copy">Povedzte nám o svojom projekte. Ozveme sa vám a spoločne nájdeme najlepšiu cestu vpred.</p><a href="mailto:info@urveo.sk" className="button-primary large">Napísať nám <span>↗</span></a><p className="contact-email">info@urveo.sk</p></section>
+      <ContactSection/>
 
       <footer><div className="footer-brand"><Logo className="footer-logo"/><p>Digitálne produkty vytvorené pre rast.</p></div><div className="footer-links"><div><small>NAVIGÁCIA</small><a href="#services">Služby</a><a href="#projects">Projekty</a><a href="#about">O nás</a></div><div><small>KONTAKT</small><a href="mailto:info@urveo.sk">info@urveo.sk</a><a href="#contact">Bratislava, SK</a></div></div><div className="footer-bottom"><span>© 2026 URVEO. Všetky práva vyhradené.</span><span>Made with precision.</span></div></footer>
       {dartOpen && <DArtExperience onClose={() => setDartOpen(false)}/>}

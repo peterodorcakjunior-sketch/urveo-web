@@ -3,6 +3,28 @@
 @media(max-width:520px){.case-experience{padding:20px 16px 45px}.case-back{padding-top:2px}.case-title h1{font-size:34px;margin-top:8px}.case-title>small{max-width:310px;line-height:1.5;margin-inline:auto}.case-layout{margin-top:35px}.phone-shell{width:min(390px,calc(100vw - 24px));border-radius:48px}.phone-screen{border-radius:41px}.case-progress button{font-size:8px}.case-context h2{font-size:34px}.case-context small{margin-top:28px}}
 @media(prefers-reduced-motion:reduce){.case-experience,.case-context,.success-check{animation:none}}
 
+@media(max-width:520px){
+  .case-experience{overflow-x:hidden;padding-left:16px;padding-right:16px}
+  .case-back{display:inline-flex;align-items:center;min-height:44px}
+  .phone-column{width:100%;min-width:0}
+  .phone-shell{width:100%;max-width:390px;margin-inline:auto}
+  .case-progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;max-width:390px;margin-inline:auto}
+  .case-progress button{min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .case-context{min-width:0;padding-inline:4px}
+  .case-context h2{font-size:clamp(30px,9.4vw,34px);letter-spacing:-2px}
+}
+
+@media(max-width:380px){
+  .app-page{padding-left:18px;padding-right:18px}
+  .food-visual.large{margin-left:-18px;margin-right:-18px}
+  .category-row{gap:6px}
+  .category-row button{padding-inline:13px}
+  .featured-cards{gap:5px}
+  .add-row{grid-template-columns:88px minmax(0,1fr)}
+  .case-progress{gap:5px}
+  .case-progress button{font-size:7px}
+}
+
 /* Device chrome stays separate from the replaceable D•ART application surface. */
 .phone-screen,.dart-interactive-demo,.app-page{width:100%;height:100%}
 .phone-screen,.dart-interactive-demo{overflow:hidden}
