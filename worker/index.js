@@ -37,15 +37,92 @@ function safeHeaderValue(value) {
   return value.replace(/[\r\n]+/g, " ").trim();
 }
 
+function escapeHtml(value) {
+  return value.replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]);
+}
+
+function formatEmailTimestamp(timestamp) {
+  const parts = new Intl.DateTimeFormat("sk-SK", {
+    timeZone: "Europe/Bratislava",
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(timestamp));
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+
+  return `${values.day}. ${values.month}. ${values.year} • ${values.hour}:${values.minute}`;
+}
+
 function createEmailText(submission, timestamp) {
   return [
     "Meno:", submission.name,
     "", "E-mail:", submission.email,
     "", "Záujem:", submission.interest,
     "", "Správa:", submission.message,
-    "", "Čas odoslania:", timestamp,
+    "", "Čas odoslania:", formatEmailTimestamp(timestamp),
     "", "Web:", "urveo.sk",
   ].join("\n");
+}
+
+function createEmailHtml(submission, timestamp) {
+  const name = escapeHtml(submission.name);
+  const email = escapeHtml(submission.email);
+  const interest = escapeHtml(submission.interest);
+  const message = escapeHtml(submission.message).replace(/\r?\n/g, "<br>");
+  const sentAt = escapeHtml(formatEmailTimestamp(timestamp));
+
+  return `<!doctype html>
+<html lang="sk">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="margin:0;padding:0;background-color:#f3f3f6;color:#17171c;font-family:Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background-color:#f3f3f6;">
+    <tr><td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:620px;background-color:#ffffff;border:1px solid #e7e7ec;border-radius:12px;overflow:hidden;">
+        <tr><td style="padding:24px 28px;background-color:#08080b;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 14px;">
+            <tr>
+              <td style="padding:0 8px 0 0;"><img src="https://urveo.sk/urveo-favicon.png" alt="URVEO V logo" width="20" height="20" style="display:block;width:20px;height:20px;border:0;"></td>
+              <td style="padding:0;color:#ffffff;font-size:13px;font-weight:700;letter-spacing:3px;line-height:20px;">URVEO</td>
+            </tr>
+          </table>
+          <div style="width:32px;height:3px;margin:0 0 12px;background-color:#7c4dff;font-size:0;line-height:0;">&nbsp;</div>
+          <h1 style="margin:0;color:#ffffff;font-size:23px;font-weight:600;line-height:1.3;">Nový dopyt z webu</h1>
+        </td></tr>
+        <tr><td style="padding:30px 28px 28px;">
+          <h2 style="margin:0 0 8px;color:#111116;font-size:26px;font-weight:700;line-height:1.25;">${name}</h2>
+          <div style="display:inline-block;margin:0 0 28px;padding:6px 10px;background-color:#f0ebff;border:1px solid #ded2ff;border-radius:999px;color:#5e35c8;font-size:13px;font-weight:600;line-height:1.2;">${interest}</div>
+          <div style="margin:0 0 7px;color:#72727c;font-size:11px;font-weight:700;letter-spacing:1.4px;line-height:1.2;">E-MAIL</div>
+          <div style="margin:0 0 28px;font-size:16px;line-height:1.5;"><a href="mailto:${email}" style="color:#5e35c8;text-decoration:underline;">${email}</a></div>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background-color:#f8f8fa;border:1px solid #e5e5ea;border-radius:8px;">
+            <tr><td style="padding:20px 20px 22px;">
+              <div style="margin:0 0 12px;color:#72727c;font-size:11px;font-weight:700;letter-spacing:1.4px;line-height:1.2;">SPRÁVA</div>
+              <div style="color:#24242a;font-size:16px;line-height:1.65;overflow-wrap:anywhere;word-break:break-word;">${message}</div>
+            </td></tr>
+          </table>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;margin-top:26px;border-top:1px solid #ececf0;">
+            <tr>
+              <td style="padding-top:18px;color:#72727c;font-size:12px;line-height:1.5;">
+                <div style="margin-bottom:4px;font-size:10px;font-weight:700;letter-spacing:1.2px;">ODOSLANÉ</div>
+                <div style="color:#3e3e46;">${sentAt}</div>
+              </td>
+              <td align="right" valign="bottom" style="padding-top:18px;color:#72727c;font-size:12px;line-height:1.5;"><a href="https://urveo.sk" style="color:#72727c;text-decoration:none;">urveo.sk</a></td>
+            </tr>
+          </table>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
 }
 
 async function sendContactEmail(submission, env) {
@@ -66,6 +143,7 @@ async function sendContactEmail(submission, env) {
       reply_to: submission.email,
       subject: `Nový dopyt z URVEO — ${safeHeaderValue(submission.name)}`,
       text: createEmailText(submission, timestamp),
+      html: createEmailHtml(submission, timestamp),
     }),
   });
 
