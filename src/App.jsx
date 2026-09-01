@@ -143,6 +143,13 @@ function ContactSection() {
 
     setSubmitStatus("submitting");
 
+    // DEVELOPMENT ONLY: Simulate the API success path for local form testing.
+    if (import.meta.env.DEV) {
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setSubmitStatus("success");
+      return;
+    }
+
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -178,7 +185,7 @@ function ContactSection() {
   });
 
   return (
-    <section className={`contact section${submitStatus === "success" ? " contact-submitted" : ""}`} id="contact" aria-labelledby="contact-heading">
+    <section className="contact section" id="contact" aria-labelledby="contact-heading">
       <div className="contact-orb"/>
       <div className="contact-intro">
         <p className="eyebrow"><span><i className="eyebrow-line"/></span>KONTAKT</p>
@@ -191,7 +198,7 @@ function ContactSection() {
         </div>
       </div>
 
-      <div className="contact-form-area">
+      <div className={`contact-form-area${submitStatus === "success" ? " contact-submitted" : ""}`}>
         {submitStatus !== "success" ? (
           <form className="contact-form" onSubmit={handleSubmit} noValidate>
             <div className="contact-field">
