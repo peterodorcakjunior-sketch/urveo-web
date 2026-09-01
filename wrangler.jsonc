@@ -3,6 +3,25 @@
   "name": "urveo-web",
   "main": "worker/index.js",
   "compatibility_date": "2026-08-22",
+  "vars": {
+    "CONTACT_RECIPIENT": "info@urveo.sk",
+    "EMAIL_FROM": "URVEO <noreply@urveo.sk>"
+  },
+  "routes": [
+    {
+      "pattern": "urveo.sk/*",
+      "zone_name": "urveo.sk"
+    },
+    {
+      "pattern": "www.urveo.sk/*",
+      "zone_name": "urveo.sk"
+    }
+  ],
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
+  },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
