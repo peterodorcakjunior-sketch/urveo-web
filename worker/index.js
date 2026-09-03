@@ -15,6 +15,8 @@ const jsonResponse = (body, status) =>
 
 const isRecord = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+const isFingerprintedAsset = (pathname) =>
+  /^\/assets\/.+-[a-zA-Z0-9_-]{8,}\.(?:css|js|png|jpe?g|webp|avif|svg|woff2?)$/.test(pathname);
 
 function normalizeSubmission(payload) {
   if (!isRecord(payload)) return null;
@@ -110,6 +112,19 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === "/api/contact") return handleContact(request, env);
-    return env.ASSETS.fetch(request);
+    if (url.hostname === "www.urveo.sk") {
+      url.hostname = "urveo.sk";
+      return Response.redirect(url.toString(), 308);
+    }
+    const response = await env.ASSETS.fetch(request);
+    if (!response.ok || !isFingerprintedAsset(url.pathname)) return response;
+
+    const headers = new Headers(response.headers);
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
   },
 };

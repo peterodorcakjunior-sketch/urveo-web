@@ -14,10 +14,10 @@ const Icon = ({ name }) => {
 };
 
 const services = [
-  { icon: "phone", number: "01", title: "Mobilné aplikácie", text: "Intuitívne iOS a Android aplikácie navrhnuté okolo používateľa a cieľov vášho biznisu." },
-  { icon: "web", number: "02", title: "Webstránky & vývoj", text: "Výkonné webové riešenia s precíznym dizajnom, ktoré menia návštevy na reálne výsledky." },
-  { icon: "cart", number: "03", title: "E-commerce", text: "Rýchle a prehľadné obchody pripravené rásť spolu s vašou značkou a zákazníkmi." },
-  { icon: "server", number: "04", title: "Backend riešenia", text: "Stabilné API, integrácie a systémy, ktoré bezpečne držia váš digitálny produkt pohromade." },
+  { icon: "phone", number: "01", title: "Mobilné aplikácie", text: "Návrh a vývoj intuitívnych mobilných aplikácií pre iOS a Android, postavených okolo používateľov a cieľov vášho biznisu." },
+  { icon: "web", number: "02", title: "Webové stránky & aplikácie", text: "Tvoríme výkonné webové stránky a vyvíjame webové aplikácie s precíznym dizajnom, ktoré menia návštevy na reálne výsledky." },
+  { icon: "cart", number: "03", title: "E-commerce", text: "Rýchle a prehľadné e-commerce riešenia pripravené rásť spolu s vašou značkou, ponukou a zákazníkmi." },
+  { icon: "server", number: "04", title: "Backend riešenia", text: "Stabilné backend systémy, API a integrácie, ktoré bezpečne prepájajú a držia váš digitálny produkt pohromade." },
 ];
 
 const processSteps = [
@@ -28,7 +28,7 @@ const processSteps = [
 ];
 
 function Logo({ className = "" }) {
-  return <img className={`brand-logo ${className}`.trim()} src={urveoLogo} alt="URVEO" />;
+  return <img className={`brand-logo ${className}`.trim()} src={urveoLogo} alt="URVEO" width="484" height="152" />;
 }
 
 function ProductVisual() {
@@ -120,7 +120,7 @@ function DArtProductVisual() {
 
 const contactInterestOptions = ["Web", "Mobilná aplikácia", "E-commerce", "Backend / systém", "Kompletné riešenie", "Iné"];
 
-function ContactSection() {
+function ContactSection({ onOpenPrivacy }) {
   const [values, setValues] = useState({ name: "", email: "", interest: "", message: "" });
   const [errors, setErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState("idle");
@@ -190,11 +190,11 @@ function ContactSection() {
       <div className="contact-intro">
         <p className="eyebrow"><span><i className="eyebrow-line"/></span>KONTAKT</p>
         <h2 id="contact-heading">Máte nápad?<br/>Poďme ho premeniť na<br/><span>digitálny produkt.</span></h2>
-        <p className="contact-copy">Web, aplikácia alebo riešenie na mieru. Napíšte nám pár slov o projekte a ozveme sa vám.</p>
+        <p className="contact-copy">Webová stránka, aplikácia alebo softvér na mieru. Napíšte nám pár slov o projekte a ozveme sa vám.</p>
         <div className="contact-details">
           <p>Napíšte nám o vašom projekte.</p>
           {/* TEMPORARY: Replace with the final professional URVEO domain email before launch. */}
-          <a href="mailto:hello@urveo.sk">hello@urveo.sk <span aria-hidden="true">↗</span></a>
+          <a href="mailto:info@urveo.sk">info@urveo.sk <span aria-hidden="true">↗</span></a>
         </div>
       </div>
 
@@ -232,6 +232,7 @@ function ContactSection() {
             <button className="button-primary contact-submit" type="submit" disabled={submitStatus === "submitting"}>
               {submitStatus === "submitting" ? "Odosielam…" : <>Odoslať dopyt <span aria-hidden="true">→</span></>}
             </button>
+            <p className="contact-privacy-notice">Odoslaním formulára beriete na vedomie spracúvanie osobných údajov na účely vybavenia vášho dopytu. Viac informácií nájdete v <button type="button" onClick={onOpenPrivacy}>Ochrane osobných údajov</button>.</p>
           </form>
         ) : (
           <div className="contact-success" role="status" aria-live="polite">
@@ -247,9 +248,72 @@ function ContactSection() {
   );
 }
 
+function PrivacyModal({ onClose }) {
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialogRef.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = dialogRef.current?.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+      if (!focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === dialogRef.current)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+      previousFocus?.focus();
+    };
+  }, [onClose]);
+
+  return (
+    <div className="privacy-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
+      <section className="privacy-modal" role="dialog" aria-modal="true" aria-labelledby="privacy-heading" ref={dialogRef} tabIndex="-1">
+        <header className="privacy-header">
+          <div><p className="eyebrow"><span><i className="eyebrow-line"/></span>SÚKROMIE A OSOBNÉ ÚDAJE</p><h2 id="privacy-heading">Ochrana <span>osobných údajov</span></h2></div>
+          <button className="privacy-close" type="button" onClick={onClose} aria-label="Zavrieť ochranu osobných údajov"><span aria-hidden="true">×</span></button>
+        </header>
+        <div className="privacy-content">
+          <p className="privacy-intro">Tieto informácie vysvetľujú, ako sa spracúvajú osobné údaje odoslané prostredníctvom kontaktného formulára na webovej stránke URVEO. Predstavujú technické a informačné minimum, nie právnu záruku ani právne poradenstvo.</p>
+          <article><span>01</span><div><h3>Prevádzkovateľ</h3>
+            {/* LEGAL TODO: Review and update the privacy information and operator identification when URVEO begins operating through a registered business entity. */}
+            <div className="privacy-placeholder"><strong>Prevádzkovateľ:</strong><br/>Peter Odorčák<br/><br/><strong>Projekt:</strong><br/>URVEO<br/><br/><strong>Kontaktný e-mail:</strong><br/><a href="mailto:info@urveo.sk">info@urveo.sk</a></div></div></article>
+          <article><span>02</span><div><h3>Aké údaje spracúvame</h3><p>Kontaktný formulár môže spracúvať meno, e-mailovú adresu, vybranú oblasť záujmu, obsah správy a prípadné technické metadáta nevyhnutné na doručenie a spracovanie dopytu. IP adresy cielene neukladáme ako súčasť odoslaného dopytu.</p></div></article>
+          <article><span>03</span><div><h3>Účel spracúvania</h3><p>Údaje spracúvame na zodpovedanie kontaktného dopytu, komunikáciu o možnej spolupráci a prípravu odpovede alebo návrhu, o ktorý používateľ požiadal.</p></div></article>
+          <article><span>04</span><div><h3>Právny základ</h3><p>Spracúvanie sa vykonáva predovšetkým preto, že je nevyhnutné na vykonanie opatrení na žiadosť dotknutej osoby pred uzatvorením zmluvy a/alebo na základe oprávneného záujmu odpovedať na prijaté dopyty, podľa povahy komunikácie.</p></div></article>
+          <article><span>05</span><div><h3>Doba uchovávania</h3><p>Osobné údaje z dopytov uchovávame iba počas obdobia potrebného na vybavenie dopytu a súvisiacej komunikácie a následne len tak dlho, ako je primerane potrebné na ochranu oprávnených právnych záujmov alebo splnenie platných právnych povinností.</p></div></article>
+          <article><span>06</span><div><h3>Príjemcovia a spracovatelia</h3><p>Na technickom spracovaní sa v nevyhnutnom rozsahu môžu podieľať:</p><ul><li><strong>Cloudflare</strong> — infraštruktúra webu, Worker a Email Routing,</li><li><strong>Resend</strong> — doručovanie transakčných e-mailov,</li><li><strong>Google / Gmail</strong> — cieľová e-mailová schránka a spracovanie e-mailu, ak sa uplatňuje.</li></ul><p>Títo poskytovatelia môžu údaje spracúvať iba v rozsahu potrebnom na poskytovanie svojich služieb.</p></div></article>
+          <article><span>07</span><div><h3>Prenosy mimo EÚ/EHP</h3><p>Niektorí technickí poskytovatelia môžu spracúvať údaje mimo Európskeho hospodárskeho priestoru. Ak sa také spracúvanie uskutočňuje, malo by byť založené na príslušných zárukách vyžadovaných platnými predpismi.</p></div></article>
+          <article><span>08</span><div><h3>Práva dotknutej osoby</h3><p>Za podmienok stanovených právnymi predpismi máte právo na prístup k údajom, ich opravu, vymazanie, obmedzenie spracúvania, namietať proti spracúvaniu, ak sa uplatňuje, a na prenosnosť údajov, ak sa uplatňuje. Máte tiež právo podať sťažnosť príslušnému dozornému orgánu, ktorým je na Slovensku Úrad na ochranu osobných údajov Slovenskej republiky.</p></div></article>
+          <article><span>09</span><div><h3>Kontakt</h3><p>Otázky týkajúce sa ochrany osobných údajov nám môžete poslať na <a href="mailto:info@urveo.sk">info@urveo.sk</a>.</p></div></article>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dartOpen, setDartOpen] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const activeNavigationSweepRef = useRef(null);
   const navigationFrameRef = useRef(null);
@@ -368,9 +432,9 @@ function App() {
     <main onClick={handleHeaderNavigation}>
       <header className="site-header"><a className="header-brand" href="#home" onClick={closeMenu}><Logo className="header-logo" /></a><nav id="site-navigation" className={menuOpen ? "open" : ""} aria-label="Hlavná navigácia">{[["home","Domov"],["services","Služby"],["projects","Naše práce"],["about","O nás"],["contact","Kontakt"]].map(([id,label]) => <a key={id} href={`#${id}`} onClick={closeMenu}>{label}</a>)}</nav><a href="#contact" className="nav-cta">Začať projekt <span>↗</span></a><button ref={menuButtonRef} type="button" className={`menu-toggle ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(current => !current)} aria-label={menuOpen ? "Zavrieť menu" : "Otvoriť menu"} aria-controls="site-navigation" aria-expanded={menuOpen}><i/><i/></button></header>
 
-      <section className="hero" id="home"><div className="hero-ambient"/><div className="hero-copy"><p className="eyebrow"><span><i className="eyebrow-line"/></span>DIGITÁLNE PRODUKTY. PRECÍZNE VYTVORENÉ.</p><h1>Tvoríme digitálne<br/>produkty, ktoré<br/><span>posúvajú biznis.</span></h1><p className="hero-description">Navrhujeme a vyvíjame výnimočné digitálne riešenia — od prvého konceptu až po produkt, ktorý rastie s vami.</p><div className="hero-actions"><a className="button-primary" href="#contact">Začať projekt <span>↗</span></a><a className="button-link" href="#projects">Pozrieť naše práce <span>↓</span></a></div><div className="hero-proof"><Logo className="hero-logo" /></div></div><ProductVisual /></section>
+      <section className="hero" id="home"><div className="hero-ambient"/><div className="hero-copy"><p className="eyebrow"><span><i className="eyebrow-line"/></span>DIGITÁLNE PRODUKTY. PRECÍZNE VYTVORENÉ.</p><h1>Tvoríme digitálne<br/>produkty, ktoré<br/><span>posúvajú biznis.</span></h1><p className="hero-description">Navrhujeme a vyvíjame webové stránky, webové a mobilné aplikácie aj softvér na mieru — od prvého konceptu po produkt, ktorý rastie s vami.</p><div className="hero-actions"><a className="button-primary" href="#contact">Začať projekt <span>↗</span></a><a className="button-link" href="#projects">Pozrieť naše práce <span>↓</span></a></div><div className="hero-proof"><Logo className="hero-logo" /></div></div><ProductVisual /></section>
 
-      <section className="services section" id="services"><div className="section-intro"><div><p className="eyebrow"><span><i className="eyebrow-line"/></span>ČO TVORÍME</p><h2>Od nápadu po <span>digitálny produkt.</span></h2></div><p>Spájame premyslený dizajn so spoľahlivou technológiou. Výsledkom sú produkty, ktoré nielen dobre vyzerajú, ale prinášajú hodnotu.</p></div><div className="service-grid">{services.map(service => <article className="service-card" key={service.title}><div className="card-top"><div className="service-icon"><Icon name={service.icon}/></div><span>{service.number}</span></div><h3>{service.title}</h3><p>{service.text}</p><a href="#contact" aria-label={`${service.title} – viac informácií`}>Zistiť viac <span>↗</span></a></article>)}</div></section>
+      <section className="services section" id="services"><div className="section-intro"><div><p className="eyebrow"><span><i className="eyebrow-line"/></span>ČO TVORÍME</p><h2>Od nápadu po <span>digitálny produkt.</span></h2></div><p>Spájame premyslený dizajn so spoľahlivým vývojom webových stránok, aplikácií a digitálnych produktov. Výsledkom sú riešenia, ktoré dobre vyzerajú a prinášajú hodnotu.</p></div><div className="service-grid">{services.map(service => <article className="service-card" key={service.title}><div className="card-top"><div className="service-icon"><Icon name={service.icon}/></div><span>{service.number}</span></div><h3>{service.title}</h3><p>{service.text}</p><a href="#contact" aria-label={`${service.title} – viac informácií`}>Zistiť viac <span>↗</span></a></article>)}</div></section>
 
       <section className="process section" aria-labelledby="process-heading"><div className="process-intro"><p className="eyebrow"><span><i className="eyebrow-line"/></span>AKO PRACUJEME</p><h2 id="process-heading">Od prvého nápadu až po <span>spustenie.</span></h2></div><div className="process-steps">{processSteps.map(step => <article className="process-step" key={step.number}><span className="process-number">{step.number}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></article>)}</div><p className="process-note">Máte iba nápad? To stačí. <span>Zvyšok môžeme vyriešiť spolu.</span></p></section>
 
@@ -378,10 +442,11 @@ function App() {
 
       <section className="about section" id="about"><div className="about-glow"/><div><p className="eyebrow"><span><i className="eyebrow-line"/></span>PREČO URVEO</p><h2>Menej hluku.<br/><span>Viac podstaty.</span></h2></div><div className="about-content"><p>Nie sme len dodávateľ. Sme partner, ktorý rozumie vášmu biznisu a pretaví jeho potenciál do digitálneho produktu.</p><div className="principles"><div><strong>01</strong><span>Premyslené do detailu</span></div><div><strong>02</strong><span>Postavené pre rast</span></div><div><strong>03</strong><span>Komunikácia bez bariér</span></div></div></div></section>
 
-      <ContactSection/>
+      <ContactSection onOpenPrivacy={() => setPrivacyOpen(true)}/>
 
-      <footer><div className="footer-brand"><Logo className="footer-logo"/><p>Digitálne produkty vytvorené pre rast.</p></div><div className="footer-links"><div><small>NAVIGÁCIA</small><a href="#services">Služby</a><a href="#projects">Projekty</a><a href="#about">O nás</a></div><div><small>KONTAKT</small><a href="mailto:info@urveo.sk">info@urveo.sk</a><a href="#contact">Bratislava, SK</a></div></div><div className="footer-bottom"><span>© 2026 URVEO. Všetky práva vyhradené.</span><span>Made with precision.</span></div></footer>
+      <footer><div className="footer-brand"><Logo className="footer-logo"/><p>Digitálne produkty vytvorené pre rast.</p></div><div className="footer-links"><div><small>NAVIGÁCIA</small><a href="#services">Služby</a><a href="#projects">Projekty</a><a href="#about">O nás</a></div><div><small>KONTAKT</small><a href="mailto:info@urveo.sk">info@urveo.sk</a><button type="button" onClick={() => setPrivacyOpen(true)}>Ochrana osobných údajov</button></div></div><div className="footer-bottom"><span>© 2026 URVEO. Všetky práva vyhradené.</span><span>Made with precision.</span></div></footer>
       {dartOpen && <DArtExperience onClose={() => setDartOpen(false)}/>}
+      {privacyOpen && <PrivacyModal onClose={() => setPrivacyOpen(false)}/>}
     </main>
   );
 }
