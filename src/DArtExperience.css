@@ -35,3 +35,5 @@
 .phone-screen,.dart-interactive-demo{overflow:hidden}
 .phone-screen{display:block;padding:0;box-sizing:border-box}
 .app-page{box-sizing:border-box}
+.case-experience:focus{outline:none}
+.case-experience button:focus-visible{outline:1px solid rgba(185,153,255,.92);outline-offset:3px;box-shadow:0 0 0 3px rgba(145,105,246,.14)}

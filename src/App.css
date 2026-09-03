@@ -385,3 +385,9 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
   .footer-bottom{flex-direction:column;align-items:flex-start}
   .footer-bottom span:last-child{text-align:left}
 }
+
+/* Accessible interaction states retain the existing hover-led card treatment. */
+.service-card:focus-within>a,.service-card>a:focus-visible{opacity:1;transform:none}
+@media(hover:none),(pointer:coarse){.service-card>a{opacity:1;transform:none}}
+.contact-success:focus{outline:none}
+.button-primary:focus-visible,.button-link:focus-visible,.nav-cta:focus-visible,.project-cta:focus-visible,.service-card>a:focus-visible,.contact-details a:focus-visible,.contact-reset:focus-visible,.footer-links a:focus-visible,.footer-links button:focus-visible,.header-brand:focus-visible{outline:1px solid rgba(185,153,255,.92);outline-offset:5px;box-shadow:0 0 0 3px rgba(145,105,246,.12)}

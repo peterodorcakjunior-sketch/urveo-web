@@ -124,6 +124,12 @@ function ContactSection({ onOpenPrivacy }) {
   const [values, setValues] = useState({ name: "", email: "", interest: "", message: "" });
   const [errors, setErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState("idle");
+  const fieldRefs = useRef({});
+  const successRef = useRef(null);
+
+  useEffect(() => {
+    if (submitStatus === "success") successRef.current?.focus();
+  }, [submitStatus]);
 
   const updateField = (event) => {
     const { name, value } = event.target;
@@ -139,7 +145,11 @@ function ContactSection({ onOpenPrivacy }) {
     if (!values.interest) nextErrors.interest = "Vyberte, o čo máte záujem.";
     if (!values.message.trim()) nextErrors.message = "Napíšte nám stručne o vašom projekte.";
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+    if (Object.keys(nextErrors).length > 0) {
+      const firstInvalidField = ["name", "email", "interest", "message"].find(field => nextErrors[field]);
+      window.requestAnimationFrame(() => fieldRefs.current[firstInvalidField]?.focus());
+      return;
+    }
 
     setSubmitStatus("submitting");
 
@@ -180,6 +190,7 @@ function ContactSection({ onOpenPrivacy }) {
     name,
     value: values[name],
     onChange: updateField,
+    ref: element => { fieldRefs.current[name] = element; },
     "aria-invalid": Boolean(errors[name]),
     "aria-describedby": errors[name] ? `contact-${name}-error` : undefined,
   });
@@ -193,7 +204,6 @@ function ContactSection({ onOpenPrivacy }) {
         <p className="contact-copy">Webová stránka, aplikácia alebo softvér na mieru. Napíšte nám pár slov o projekte a ozveme sa vám.</p>
         <div className="contact-details">
           <p>Napíšte nám o vašom projekte.</p>
-          {/* TEMPORARY: Replace with the final professional URVEO domain email before launch. */}
           <a href="mailto:info@urveo.sk">info@urveo.sk <span aria-hidden="true">↗</span></a>
         </div>
       </div>
@@ -203,12 +213,12 @@ function ContactSection({ onOpenPrivacy }) {
           <form className="contact-form" onSubmit={handleSubmit} noValidate>
             <div className="contact-field">
               <label htmlFor="contact-name">Meno</label>
-              <input id="contact-name" type="text" autoComplete="name" placeholder="Vaše meno" {...fieldProps("name")}/>
+              <input id="contact-name" type="text" autoComplete="name" maxLength="120" placeholder="Vaše meno" {...fieldProps("name")}/>
               {errors.name && <p className="contact-error" id="contact-name-error" role="alert">{errors.name}</p>}
             </div>
             <div className="contact-field">
               <label htmlFor="contact-email">E-mail</label>
-              <input id="contact-email" type="email" autoComplete="email" inputMode="email" placeholder="vas@email.sk" {...fieldProps("email")}/>
+              <input id="contact-email" type="email" autoComplete="email" inputMode="email" maxLength="254" placeholder="vas@email.sk" {...fieldProps("email")}/>
               {errors.email && <p className="contact-error" id="contact-email-error" role="alert">{errors.email}</p>}
             </div>
             <div className="contact-field">
@@ -223,7 +233,7 @@ function ContactSection({ onOpenPrivacy }) {
             </div>
             <div className="contact-field">
               <label htmlFor="contact-message">Povedzte nám stručne o projekte</label>
-              <textarea id="contact-message" rows="4" placeholder="Čo chcete vytvoriť?" {...fieldProps("message")}/>
+              <textarea id="contact-message" rows="4" maxLength="5000" placeholder="Čo chcete vytvoriť?" {...fieldProps("message")}/>
               {errors.message && <p className="contact-error" id="contact-message-error" role="alert">{errors.message}</p>}
             </div>
             {submitStatus === "error" && (
@@ -235,7 +245,7 @@ function ContactSection({ onOpenPrivacy }) {
             <p className="contact-privacy-notice">Odoslaním formulára beriete na vedomie spracúvanie osobných údajov na účely vybavenia vášho dopytu. Viac informácií nájdete v <button type="button" onClick={onOpenPrivacy}>Ochrane osobných údajov</button>.</p>
           </form>
         ) : (
-          <div className="contact-success" role="status" aria-live="polite">
+          <div className="contact-success" role="status" aria-live="polite" ref={successRef} tabIndex="-1">
             <div className="contact-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6.5 12.5 3.5 3.5 7.5-8"/></svg></div>
             <h3>Ďakujeme.</h3>
             <p className="contact-success-title">Dopyt bol úspešne odoslaný.</p>
@@ -324,10 +334,26 @@ function App() {
   useEffect(() => {
     if (!menuOpen) return undefined;
 
+    const previousFocus = document.activeElement;
+    const menuLinks = Array.from(document.getElementById("site-navigation")?.querySelectorAll("a[href]") ?? []);
+    menuLinks[0]?.focus();
+
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         setMenuOpen(false);
         menuButtonRef.current?.focus();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = [menuButtonRef.current, ...menuLinks].filter(Boolean);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
     const handleResize = () => {
@@ -341,6 +367,7 @@ function App() {
       document.body.classList.remove("menu-open");
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
+      if (previousFocus && document.contains(previousFocus)) previousFocus.focus();
     };
   }, [menuOpen]);
 
