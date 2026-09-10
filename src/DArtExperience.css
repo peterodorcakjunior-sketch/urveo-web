@@ -36,4 +36,20 @@
 .phone-screen{display:block;padding:0;box-sizing:border-box}
 .app-page{box-sizing:border-box}
 .case-experience:focus{outline:none}
+.case-experience,.app-page{overscroll-behavior-y:contain}
+.app-header button .arrow-icon{vertical-align:middle}
+@media(max-width:900px){
+  .case-experience{min-height:100vh;min-height:100dvh;padding-bottom:max(48px,env(safe-area-inset-bottom,0px))}
+}
+@media(max-width:520px){
+  .case-experience{padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(45px,env(safe-area-inset-bottom,0px))}
+}
+@media(pointer:coarse){
+  .app-header button,.category-row button,.choice-row button,.counter button{position:relative}
+  .app-header button:after{content:"";position:absolute;inset:-6px}
+  .category-row button:after,.choice-row button:after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
+  .counter button:after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
+  .remove:after{content:"";position:absolute;left:0;right:0;top:50%;height:32px;transform:translateY(-50%)}
+  .case-progress button{min-height:44px}
+}
 .case-experience button:focus-visible{outline:1px solid rgba(185,153,255,.92);outline-offset:3px;box-shadow:0 0 0 3px rgba(145,105,246,.14)}

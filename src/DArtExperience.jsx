@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./DArtExperience.css";
+import ArrowIcon from "./ArrowIcon";
 
 const products = [
   { id: 1, category: "Pizza", name: "Margherita", description: "Paradajkový základ, mozzarella, bazalka", price: 8.9, tone: "tomato" },
@@ -23,7 +24,7 @@ const money = value => `${value.toFixed(2).replace(".", ",")} €`;
 function FoodVisual({ tone, large = false }) { return <div className={`food-visual food-${tone} ${large ? "large" : ""}`}><i/><i/><i/></div>; }
 
 function PhoneHeader({ title, onBack, cartCount }) {
-  return <header className="app-header">{onBack ? <button onClick={onBack} aria-label="Späť">←</button> : <span className="dart-wordmark">D<span>•</span>ART</span>}<strong>{title}</strong><span className="app-cart">{cartCount ? `Taška ${cartCount}` : ""}</span></header>;
+  return <header className="app-header">{onBack ? <button onClick={onBack} aria-label="Späť"><ArrowIcon direction="left"/></button> : <span className="dart-wordmark">D<span>•</span>ART</span>}<strong>{title}</strong><span className="app-cart">{cartCount ? `Taška ${cartCount}` : ""}</span></header>;
 }
 
 function DartDevice({ children }) {
@@ -54,13 +55,23 @@ export default function DArtExperience({ onClose }) {
   const reset = () => { setScreen(0); setCart([]); setSuccess(false); setCategory("Pizza"); setDelivery("Doručenie"); };
   useEffect(() => {
     const previousFocus = document.activeElement;
+    const previousScroll = { left: window.scrollX, top: window.scrollY };
+    const scrollWithoutAnimation = (position) => {
+      const rootStyle = document.documentElement.style;
+      const previousBehavior = rootStyle.getPropertyValue("scroll-behavior");
+      const previousPriority = rootStyle.getPropertyPriority("scroll-behavior");
+      rootStyle.setProperty("scroll-behavior", "auto", "important");
+      window.scrollTo({ ...position, behavior: "auto" });
+      if (previousBehavior) rootStyle.setProperty("scroll-behavior", previousBehavior, previousPriority);
+      else rootStyle.removeProperty("scroll-behavior");
+    };
     const dialog = dialogRef.current;
     const backgroundElements = Array.from(dialog?.parentElement?.children ?? []).filter(element => element !== dialog);
     const previousInert = backgroundElements.map(element => element.inert);
     backgroundElements.forEach(element => { element.inert = true; });
     document.body.classList.add("case-open");
-    window.scrollTo(0, 0);
-    dialog?.focus();
+    scrollWithoutAnimation({ left: 0, top: 0 });
+    dialog?.focus({ preventScroll: true });
 
     const handleKeyDown = event => {
       if (event.key === "Escape") {
@@ -90,22 +101,23 @@ export default function DArtExperience({ onClose }) {
       document.body.classList.remove("case-open");
       window.removeEventListener("keydown", handleKeyDown);
       backgroundElements.forEach((element, index) => { element.inert = previousInert[index]; });
-      previousFocus?.focus();
+      previousFocus?.focus({ preventScroll: true });
+      scrollWithoutAnimation(previousScroll);
     };
   }, [onClose]);
 
   return <div className="case-experience" role="dialog" aria-modal="true" aria-labelledby="dart-experience-title" ref={dialogRef} tabIndex="-1">
-    <div className="case-glow"/><button className="case-back" onClick={onClose}>← <span>Späť na URVEO</span></button>
+    <div className="case-glow"/><button className="case-back" onClick={onClose}><ArrowIcon direction="left"/> <span>Späť na URVEO</span></button>
     <div className="case-title"><p className="eyebrow"><span><i className="eyebrow-line"/></span>INTERAKTÍVNY PROJEKT</p><h2 id="dart-experience-title">D•ART</h2><p>Interaktívna ukážka aplikácie</p><small>Vyskúšajte si zjednodušenú ukážku objednávkového procesu priamo v prehliadači.</small></div>
     <div className="case-layout">
       <div className="case-context" key={screen}><span>0{screen + 1} / 05</span><h3>{copy[screen][0]}</h3><p>{copy[screen][1]}</p><small>INTERAKTÍVNY PROTOTYP · DEMO OBSAH</small></div>
       <div className="phone-column">
         <DartDevice><DartInteractiveDemo>
-          {screen === 0 && <div className="app-page home-screen"><PhoneHeader cartCount={cartCount}/><div className="welcome"><small>VITAJTE V D•ART</small><h3>Čo si dáte dnes?</h3><p>Vyberte si z našej demo ponuky.</p></div><div className="category-row">{categories.map(cat => <button key={cat} onClick={() => { setCategory(cat); setScreen(1); }}>{cat}</button>)}</div><div className="featured-label"><b>Obľúbené</b><span>Demo ponuka</span></div><div className="featured-cards">{products.slice(0,3).map(item => <button key={item.id} onClick={() => goProduct(item)}><FoodVisual tone={item.tone}/><span>{item.name}</span><b>{money(item.price)}</b></button>)}</div><button className="app-primary" onClick={() => setScreen(1)}>Pozrieť menu <span>→</span></button></div>}
+          {screen === 0 && <div className="app-page home-screen"><PhoneHeader cartCount={cartCount}/><div className="welcome"><small>VITAJTE V D•ART</small><h3>Čo si dáte dnes?</h3><p>Vyberte si z našej demo ponuky.</p></div><div className="category-row">{categories.map(cat => <button key={cat} onClick={() => { setCategory(cat); setScreen(1); }}>{cat}</button>)}</div><div className="featured-label"><b>Obľúbené</b><span>Demo ponuka</span></div><div className="featured-cards">{products.slice(0,3).map(item => <button key={item.id} onClick={() => goProduct(item)}><FoodVisual tone={item.tone}/><span>{item.name}</span><b>{money(item.price)}</b></button>)}</div><button className="app-primary" onClick={() => setScreen(1)}>Pozrieť menu <span><ArrowIcon direction="right"/></span></button></div>}
           {screen === 1 && <div className="app-page menu-screen"><PhoneHeader title="Menu" onBack={() => setScreen(0)} cartCount={cartCount}/><div className="category-row sticky">{categories.map(cat => <button className={category === cat ? "active" : ""} aria-pressed={category === cat} key={cat} onClick={() => setCategory(cat)}>{cat}</button>)}</div><small className="demo-label">DEMO PONUKA</small><div className="product-list">{products.filter(item => item.category === category).map(item => <button key={item.id} onClick={() => goProduct(item)}><FoodVisual tone={item.tone}/><span><b>{item.name}</b><small>{item.description}</small><strong>{money(item.price)}</strong></span><i>›</i></button>)}</div></div>}
           {screen === 2 && <div className="app-page detail-screen"><PhoneHeader onBack={() => setScreen(1)} cartCount={cartCount}/><FoodVisual tone={product.tone} large/><div className="detail-copy"><small>DEMO PRODUKT</small><h3>{product.name}</h3><p>{product.description}</p><div className="detail-line"><b>Veľkosť</b><div className="choice-row">{["32 cm","40 cm"].map(value => <button className={size === value ? "active" : ""} aria-pressed={size === value} onClick={() => setSize(value)} key={value}>{value}</button>)}</div></div><label className="extra"><span><b>Extra mozzarella</b><small>+ 1,50 €</small></span><input type="checkbox" checked={extra} onChange={event => setExtra(event.target.checked)}/></label><div className="add-row"><div className="counter"><button aria-label="Znížiť množstvo" onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><b>{quantity}</b><button aria-label="Zvýšiť množstvo" onClick={() => setQuantity(quantity + 1)}>+</button></div><button className="app-primary" onClick={addToCart}>Pridať · {money((product.price + (size === "40 cm" ? 3 : 0) + (extra ? 1.5 : 0)) * quantity)}</button></div></div></div>}
-          {screen === 3 && <div className="app-page cart-screen"><PhoneHeader title="Košík" onBack={() => setScreen(1)} cartCount={cartCount}/>{cart.length ? <><div className="cart-items">{cart.map((item,index) => <article key={`${item.id}-${index}`}><FoodVisual tone={item.tone}/><div><b>{item.name}</b><small>{item.size}{item.extra ? " · extra mozzarella" : ""}</small><strong>{money(item.price * item.quantity)}</strong><div className="counter"><button aria-label={`Znížiť množstvo: ${item.name}`} onClick={() => changeCart(index,-1)}>−</button><span>{item.quantity}</span><button aria-label={`Zvýšiť množstvo: ${item.name}`} onClick={() => changeCart(index,1)}>+</button></div></div><button className="remove" onClick={() => setCart(items => items.filter((_,i) => i !== index))}>Odstrániť</button></article>)}</div><div className="totals"><p><span>Medzisúčet</span><b>{money(subtotal)}</b></p><p><span>Doručenie</span><b>{money(2.5)}</b></p><p><span>Spolu</span><strong>{money(subtotal + 2.5)}</strong></p></div><button className="app-primary bottom" onClick={() => setScreen(4)}>Pokračovať <span>→</span></button></> : <div className="empty-cart"><b>Košík je prázdny</b><p>Vyberte si niečo z demo ponuky.</p><button className="app-primary" onClick={() => setScreen(1)}>Otvoriť menu</button></div>}</div>}
-          {screen === 4 && <div className="app-page checkout-screen"><PhoneHeader title={success ? "Hotovo" : "Objednávka"} onBack={!success ? () => setScreen(3) : undefined} cartCount={cartCount}/>{success ? <div className="success-state"><div className="success-check">✓</div><small>DEMO DOKONČENÉ</small><h3>Objednávka prijatá</h3><p>Takto jednoducho môže zákazník dokončiť objednávku.</p><button className="app-primary" onClick={reset}>Spustiť demo znova</button></div> : <><div className="checkout-copy"><small>SPÔSOB PREVZATIA</small><h3>Ako si objednávku prevezmete?</h3><div className="delivery-options">{["Doručenie","Osobný odber"].map(value => <button className={delivery === value ? "active" : ""} aria-pressed={delivery === value} onClick={() => setDelivery(value)} key={value}><i/>{value}<small>{value === "Doručenie" ? "Približne 35–45 min" : "Pripravené približne o 25 min"}</small></button>)}</div><div className="totals"><p><span>Objednávka</span><b>{money(subtotal)}</b></p><p><span>{delivery}</span><b>{deliveryPrice ? money(deliveryPrice) : "Zdarma"}</b></p><p><span>Spolu</span><strong>{money(subtotal + deliveryPrice)}</strong></p></div></div><button className="app-primary bottom" onClick={() => setSuccess(true)}>Dokončiť demo objednávku</button></>}</div>}
+          {screen === 3 && <div className="app-page cart-screen"><PhoneHeader title="Košík" onBack={() => setScreen(1)} cartCount={cartCount}/>{cart.length ? <><div className="cart-items">{cart.map((item,index) => <article key={`${item.id}-${index}`}><FoodVisual tone={item.tone}/><div><b>{item.name}</b><small>{item.size}{item.extra ? " · extra mozzarella" : ""}</small><strong>{money(item.price * item.quantity)}</strong><div className="counter"><button aria-label={`Znížiť množstvo: ${item.name}`} onClick={() => changeCart(index,-1)}>−</button><span>{item.quantity}</span><button aria-label={`Zvýšiť množstvo: ${item.name}`} onClick={() => changeCart(index,1)}>+</button></div></div><button className="remove" onClick={() => setCart(items => items.filter((_,i) => i !== index))}>Odstrániť</button></article>)}</div><div className="totals"><p><span>Medzisúčet</span><b>{money(subtotal)}</b></p><p><span>Doručenie</span><b>{money(2.5)}</b></p><p><span>Spolu</span><strong>{money(subtotal + 2.5)}</strong></p></div><button className="app-primary bottom" onClick={() => setScreen(4)}>Pokračovať <span><ArrowIcon direction="right"/></span></button></> : <div className="empty-cart"><b>Košík je prázdny</b><p>Vyberte si niečo z demo ponuky.</p><button className="app-primary" onClick={() => setScreen(1)}>Otvoriť menu</button></div>}</div>}
+          {screen === 4 && <div className="app-page checkout-screen"><PhoneHeader title={success ? "Hotovo" : "Objednávka"} onBack={!success ? () => setScreen(3) : undefined} cartCount={cartCount}/>{success ? <div className="success-state"><div className="success-check"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="m6.5 12.5 3.5 3.5 7.5-8"/></svg></div><small>DEMO DOKONČENÉ</small><h3>Objednávka prijatá</h3><p>Takto jednoducho môže zákazník dokončiť objednávku.</p><button className="app-primary" onClick={reset}>Spustiť demo znova</button></div> : <><div className="checkout-copy"><small>SPÔSOB PREVZATIA</small><h3>Ako si objednávku prevezmete?</h3><div className="delivery-options">{["Doručenie","Osobný odber"].map(value => <button className={delivery === value ? "active" : ""} aria-pressed={delivery === value} onClick={() => setDelivery(value)} key={value}><i/>{value}<small>{value === "Doručenie" ? "Približne 35–45 min" : "Pripravené približne o 25 min"}</small></button>)}</div><div className="totals"><p><span>Objednávka</span><b>{money(subtotal)}</b></p><p><span>{delivery}</span><b>{deliveryPrice ? money(deliveryPrice) : "Zdarma"}</b></p><p><span>Spolu</span><strong>{money(subtotal + deliveryPrice)}</strong></p></div></div><button className="app-primary bottom" onClick={() => setSuccess(true)}>Dokončiť demo objednávku</button></>}</div>}
         </DartInteractiveDemo></DartDevice>
         <nav className="case-progress" aria-label="Postup ukážky">{steps.map((label,index) => <button key={label} className={screen === index ? "active" : screen > index ? "done" : ""} onClick={() => index <= screen && setScreen(index)} disabled={index > screen}><span>0{index + 1}</span>{label}</button>)}</nav>
       </div>

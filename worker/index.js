@@ -8,6 +8,7 @@ const LIMITS = {
   email: 254,
   interest: 120,
   message: 5000,
+  turnstileToken: 2048,
 };
 
 const jsonResponse = (body, status) =>
@@ -21,7 +22,7 @@ const isFingerprintedAsset = (pathname) =>
 function normalizeSubmission(payload) {
   if (!isRecord(payload)) return null;
 
-  const allowedFields = ["name", "email", "interest", "message"];
+  const allowedFields = ["name", "email", "interest", "message", "turnstileToken"];
   if (Object.keys(payload).some((field) => !allowedFields.includes(field))) return null;
 
   const submission = {};
@@ -33,6 +34,25 @@ function normalizeSubmission(payload) {
 
   if (!isValidEmail(submission.email)) return null;
   return submission;
+}
+
+async function verifyTurnstile(token, request, env) {
+  if (!env.TURNSTILE_SECRET_KEY) throw new Error("Turnstile binding is not configured");
+
+  const formData = new FormData();
+  formData.append("secret", env.TURNSTILE_SECRET_KEY);
+  formData.append("response", token);
+  const remoteIp = request.headers.get("CF-Connecting-IP");
+  if (remoteIp) formData.append("remoteip", remoteIp);
+
+  const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) return false;
+
+  const result = await response.json();
+  return result?.success === true;
 }
 
 function safeHeaderValue(value) {
@@ -175,7 +195,15 @@ async function handleContact(request, env) {
   const submission = normalizeSubmission(payload);
   if (!submission) return jsonResponse({ ok: false, error: "Invalid submission" }, 400);
 
-  // Turnstile verification can be inserted here before email delivery.
+  let verified;
+  try {
+    verified = await verifyTurnstile(submission.turnstileToken, request, env);
+  } catch (error) {
+    console.error("Contact verification failed", error instanceof Error ? error.message : "Unknown error");
+    return jsonResponse({ ok: false, error: "Verification failed" }, 403);
+  }
+  if (!verified) return jsonResponse({ ok: false, error: "Verification failed" }, 403);
+
   try {
     await sendContactEmail(submission, env);
   } catch (error) {
