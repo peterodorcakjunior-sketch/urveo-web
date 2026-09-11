@@ -1,3 +1,25 @@
+// Keep this policy aligned with public/_headers for static responses.
+const SECURITY_HEADERS = {
+  "Content-Security-Policy-Report-Only": "default-src 'none'; script-src 'self' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'none'; media-src 'none'; manifest-src 'self';",
+  "Strict-Transport-Security": "max-age=300",
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+  "X-Frame-Options": "DENY",
+};
+
+function withSecurityHeaders(response) {
+  const headers = new Headers(response.headers);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    headers.set(name, value);
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 const JSON_HEADERS = {
   "Content-Type": "application/json; charset=utf-8",
   "Cache-Control": "no-store",
@@ -217,20 +239,20 @@ async function handleContact(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname === "/api/contact") return handleContact(request, env);
+    if (url.pathname === "/api/contact") return withSecurityHeaders(await handleContact(request, env));
     if (url.hostname === "www.urveo.sk") {
       url.hostname = "urveo.sk";
-      return Response.redirect(url.toString(), 308);
+      return withSecurityHeaders(Response.redirect(url.toString(), 308));
     }
     const response = await env.ASSETS.fetch(request);
-    if (!response.ok || !isFingerprintedAsset(url.pathname)) return response;
+    if (!response.ok || !isFingerprintedAsset(url.pathname)) return withSecurityHeaders(response);
 
     const headers = new Headers(response.headers);
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
-    return new Response(response.body, {
+    return withSecurityHeaders(new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
       headers,
-    });
+    }));
   },
 };
