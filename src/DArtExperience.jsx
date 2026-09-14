@@ -439,7 +439,7 @@ export default function DArtExperience({ onClose }) {
               </section>
             )}
 
-            {screen === 4 && (
+            {screen === 4 && success && (
               <section className="real-app-page real-success-page">
                 <AppHeader title="Interaktívna ukážka" cartCount={0}/>
                 <div className="real-success">
