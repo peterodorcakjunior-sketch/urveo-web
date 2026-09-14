@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import "./DArtExperience.css";
 
 const pizzas = [
-  { id: 1, name: "Margherita", description: "Rajčinová omáčka, mozzarella", price: 6.7, prices: [6.7, 8.4, 8.9], tone: "margherita" },
-  { id: 2, name: "Prosciutto", description: "Rajčinová omáčka, mozzarella, šunka", price: 7.8, prices: [7.8, 9.3, 10], tone: "prosciutto" },
-  { id: 3, name: "Toscana", description: "Rajčinová omáčka, mozzarella, šunka, šampiňóny", price: 8, prices: [8, 9.5, 10.2], tone: "toscana" },
-  { id: 4, name: "Cardinale", description: "Rajčinová omáčka, mozzarella, šunka, kukurica", price: 8, prices: [8, 9.5, 10.2], tone: "cardinale" },
-  { id: 5, name: "Broccoli", description: "Rajčinová omáčka, mozzarella, brokolica, niva, kukurica", price: 8.2, prices: [8.2, 9.8, 10.5], tone: "broccoli" },
-  { id: 6, name: "Siciliana", description: "Rajčinová omáčka, mozzarella, sardely, olivy, kapary", price: 8.5, prices: [8.5, 10, 10.8], tone: "siciliana" },
+  { id: 1, name: "Margherita", description: "Rajčinová omáčka, mozzarella", price: 6.7, prices: [6.7, 8.4, 8.9], tone: "margherita", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=86" },
+  { id: 2, name: "Prosciutto", description: "Rajčinová omáčka, mozzarella, šunka", price: 7.8, prices: [7.8, 9.3, 10], tone: "prosciutto", image: "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1200&q=86" },
+  { id: 3, name: "Toscana", description: "Rajčinová omáčka, mozzarella, šunka, šampiňóny", price: 8, prices: [8, 9.5, 10.2], tone: "toscana", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1200&q=86" },
+  { id: 4, name: "Cardinale", description: "Rajčinová omáčka, mozzarella, šunka, kukurica", price: 8, prices: [8, 9.5, 10.2], tone: "cardinale", image: "https://images.unsplash.com/photo-1566843972142-a7fcb70de55a?auto=format&fit=crop&w=1200&q=86" },
+  { id: 5, name: "Broccoli", description: "Rajčinová omáčka, mozzarella, brokolica, niva, kukurica", price: 8.2, prices: [8.2, 9.8, 10.5], tone: "broccoli", image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=1200&q=86" },
+  { id: 6, name: "Siciliana", description: "Rajčinová omáčka, mozzarella, sardely, olivy, kapary", price: 8.5, prices: [8.5, 10, 10.8], tone: "siciliana", image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=1200&q=86" },
 ];
 
 const sizes = [
@@ -32,12 +32,10 @@ const flowCopy = [
 const steps = ["Pizza", "Detail", "Košík", "Dokončenie", "Hotovo"];
 const money = value => `${value.toFixed(2).replace(".", ",")} €`;
 
-const officialPizzaPhoto = "https://www.pizzadart.sk/fileadmin/_processed_/a/8/csm_pizz_10a08394c0.jpg";
-
-function PizzaArt({ tone = "margherita", compact = false }) {
+function PizzaArt({ image, tone = "margherita", compact = false }) {
   return (
     <div className={`real-pizza pizza-${tone}${compact ? " compact" : ""}`} aria-hidden="true">
-      <img src={officialPizzaPhoto} alt="" loading={compact ? "lazy" : "eager"}/>
+      <img src={image} alt="" loading={compact ? "lazy" : "eager"}/>
     </div>
   );
 }
@@ -217,7 +215,7 @@ export default function DArtExperience({ onClose }) {
                 <div className="real-pizza-list">
                   {pizzas.map(item => (
                     <button className="real-pizza-card" type="button" key={item.id} onClick={() => resetConfiguration(item)}>
-                      <PizzaArt tone={item.tone} compact/>
+                      <PizzaArt image={item.image} tone={item.tone} compact/>
                       <span>
                         <b>{item.id}. {item.name}</b>
                         <small>{item.description}</small>
@@ -233,7 +231,7 @@ export default function DArtExperience({ onClose }) {
             {screen === 1 && (
               <section className="real-app-page real-detail-page">
                 <AppHeader title={`${product.id}. ${product.name}`} onBack={() => setScreen(0)} cartCount={cartCount}/>
-                <PizzaArt tone={product.tone}/>
+                <PizzaArt image={product.image} tone={product.tone}/>
                 <div className="real-detail-copy">
                   <h3>{product.id}. {product.name}</h3>
                   <p>{product.description}</p>
