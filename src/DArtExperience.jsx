@@ -2,18 +2,18 @@ import { useEffect, useMemo, useState } from "react";
 import "./DArtExperience.css";
 
 const pizzas = [
-  { id: 1, name: "Margherita", description: "Rajčinová omáčka, mozzarella", price: 6.7, tone: "margherita" },
-  { id: 2, name: "Prosciutto", description: "Rajčinová omáčka, mozzarella, šunka", price: 7.8, tone: "prosciutto" },
-  { id: 3, name: "Toscana", description: "Rajčinová omáčka, mozzarella, šunka, šampiňóny", price: 8, tone: "toscana" },
-  { id: 4, name: "Cardinale", description: "Rajčinová omáčka, mozzarella, šunka, kukurica", price: 8, tone: "cardinale" },
-  { id: 5, name: "Broccoli", description: "Rajčinová omáčka, mozzarella, brokolica, niva, kukurica", price: 8.2, tone: "broccoli" },
-  { id: 6, name: "Siciliana", description: "Rajčinová omáčka, mozzarella, saláma, olivy", price: 8.4, tone: "siciliana" },
+  { id: 1, name: "Margherita", description: "Rajčinová omáčka, mozzarella", price: 6.7, prices: [6.7, 8.4, 8.9], tone: "margherita" },
+  { id: 2, name: "Prosciutto", description: "Rajčinová omáčka, mozzarella, šunka", price: 7.8, prices: [7.8, 9.3, 10], tone: "prosciutto" },
+  { id: 3, name: "Toscana", description: "Rajčinová omáčka, mozzarella, šunka, šampiňóny", price: 8, prices: [8, 9.5, 10.2], tone: "toscana" },
+  { id: 4, name: "Cardinale", description: "Rajčinová omáčka, mozzarella, šunka, kukurica", price: 8, prices: [8, 9.5, 10.2], tone: "cardinale" },
+  { id: 5, name: "Broccoli", description: "Rajčinová omáčka, mozzarella, brokolica, niva, kukurica", price: 8.2, prices: [8.2, 9.8, 10.5], tone: "broccoli" },
+  { id: 6, name: "Siciliana", description: "Rajčinová omáčka, mozzarella, sardely, olivy, kapary", price: 8.5, prices: [8.5, 10, 10.8], tone: "siciliana" },
 ];
 
 const sizes = [
-  { id: "small", title: "32 cm", subtitle: "400 g", extra: 0 },
-  { id: "thin", title: "40 cm", subtitle: "550 g · extra tenká", extra: 1.7 },
-  { id: "large", title: "40 cm", subtitle: "800 g", extra: 2.2 },
+  { id: "small", title: "32 cm", subtitle: "400 g", index: 0 },
+  { id: "thin", title: "40 cm", subtitle: "550 g · extra tenká", index: 1 },
+  { id: "large", title: "40 cm", subtitle: "800 g", index: 2 },
 ];
 
 const extraIngredients = [
@@ -32,10 +32,12 @@ const flowCopy = [
 const steps = ["Pizza", "Detail", "Košík", "Dokončenie", "Hotovo"];
 const money = value => `${value.toFixed(2).replace(".", ",")} €`;
 
+const officialPizzaPhoto = "https://www.pizzadart.sk/fileadmin/_processed_/a/8/csm_pizz_10a08394c0.jpg";
+
 function PizzaArt({ tone = "margherita", compact = false }) {
   return (
     <div className={`real-pizza pizza-${tone}${compact ? " compact" : ""}`} aria-hidden="true">
-      <i/><i/><i/><i/><i/><i/>
+      <img src={officialPizzaPhoto} alt="" loading={compact ? "lazy" : "eager"}/>
     </div>
   );
 }
@@ -96,8 +98,8 @@ export default function DArtExperience({ onClose }) {
 
   const selectedSize = sizes.find(item => item.id === size) ?? sizes[0];
   const extrasCount = Object.values(extras).reduce((sum, amount) => sum + amount, 0);
-  const configuredUnitPrice = product.price
-    + selectedSize.extra
+  const configuredUnitPrice = product.prices[selectedSize.index]
+
     + (heart ? 3 : 0)
     + (dough === "Bezlepkové" ? 2 : dough === "Celozrnné" ? 1 : 0)
     + (cheese === "Bezlaktózový syr" ? 1 : 0)
@@ -254,7 +256,7 @@ export default function DArtExperience({ onClose }) {
                         selected={size === option.id}
                         onClick={() => { setSize(option.id); if (option.id !== "large") setHeart(false); }}
                       >
-                        <i/><span><b>{option.title}</b><small>{option.subtitle}</small></span><strong>{money(product.price + option.extra)}</strong>
+                        <i/><span><b>{option.title}</b><small>{option.subtitle}</small></span><strong>{money(product.prices[option.index])}</strong>
                       </Choice>
                     ))}
                   </div>
