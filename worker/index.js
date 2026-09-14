@@ -25,6 +25,9 @@ const JSON_HEADERS = {
   "Cache-Control": "no-store",
 };
 
+// Fits all field maxima even with six-byte JSON escapes, plus JSON overhead.
+const MAX_CONTACT_BODY_BYTES = 64 * 1024;
+
 const LIMITS = {
   name: 120,
   email: 254,
@@ -74,7 +77,7 @@ async function verifyTurnstile(token, request, env) {
   if (!response.ok) return false;
 
   const result = await response.json();
-  return result?.success === true;
+  return result?.success === true && result.hostname === "urveo.sk";
 }
 
 function safeHeaderValue(value) {
@@ -209,13 +212,50 @@ async function handleContact(request, env) {
 
   let payload;
   try {
-    payload = await request.json();
+    const body = new Uint8Array(MAX_CONTACT_BODY_BYTES);
+    let bytesRead = 0;
+    const reader = request.body?.getReader();
+    if (reader) {
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (value.byteLength > MAX_CONTACT_BODY_BYTES - bytesRead) {
+            void reader.cancel().catch(() => {});
+            return jsonResponse({ ok: false, error: "Invalid submission" }, 413);
+          }
+          body.set(value, bytesRead);
+          bytesRead += value.byteLength;
+        }
+      } finally {
+        reader.releaseLock();
+      }
+    }
+    payload = JSON.parse(new TextDecoder().decode(body.subarray(0, bytesRead)));
   } catch {
     return jsonResponse({ ok: false, error: "Invalid submission" }, 400);
   }
 
   const submission = normalizeSubmission(payload);
   if (!submission) return jsonResponse({ ok: false, error: "Invalid submission" }, 400);
+
+  const ip = request.headers.get("CF-Connecting-IP")?.trim();
+  if (!ip) return jsonResponse({ ok: false, error: "Unable to send submission" }, 503);
+
+  try {
+    const result = await env.CONTACT_RATE_LIMITER.limit({ key: `contact:${ip}` });
+    if (!isRecord(result) || typeof result.success !== "boolean") {
+      return jsonResponse({ ok: false, error: "Unable to send submission" }, 503);
+    }
+    if (!result.success) {
+      return new Response(JSON.stringify({ ok: false, error: "Unable to send submission" }), {
+        status: 429,
+        headers: { ...JSON_HEADERS, "Retry-After": "60" },
+      });
+    }
+  } catch {
+    return jsonResponse({ ok: false, error: "Unable to send submission" }, 503);
+  }
 
   let verified;
   try {
