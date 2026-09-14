@@ -156,6 +156,7 @@ function TurnstileWidget({ siteKey, onToken, onUnavailable }) {
       if (!active || !containerRef.current) return;
       widgetId = turnstile.render(containerRef.current, {
         sitekey: siteKey,
+        action: "contact",
         theme: "dark",
         size: "flexible",
         appearance: "interaction-only",

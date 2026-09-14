@@ -73,11 +73,12 @@ async function verifyTurnstile(token, request, env) {
   const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
     body: formData,
+    signal: AbortSignal.timeout(10_000),
   });
   if (!response.ok) return false;
 
   const result = await response.json();
-  return result?.success === true && result.hostname === "urveo.sk";
+  return result?.success === true && result.hostname === "urveo.sk" && result.action === "contact";
 }
 
 function safeHeaderValue(value) {
@@ -192,6 +193,7 @@ async function sendContactEmail(submission, env) {
       text: createEmailText(submission, timestamp),
       html: createEmailHtml(submission, timestamp),
     }),
+    signal: AbortSignal.timeout(15_000),
   });
 
   if (!response.ok) throw new Error(`Email provider returned ${response.status}`);
@@ -254,22 +256,23 @@ async function handleContact(request, env) {
       });
     }
   } catch {
+    console.error("contact_rate_limiter_error");
     return jsonResponse({ ok: false, error: "Unable to send submission" }, 503);
   }
 
   let verified;
   try {
     verified = await verifyTurnstile(submission.turnstileToken, request, env);
-  } catch (error) {
-    console.error("Contact verification failed", error instanceof Error ? error.message : "Unknown error");
+  } catch {
+    console.error("contact_turnstile_error");
     return jsonResponse({ ok: false, error: "Verification failed" }, 403);
   }
   if (!verified) return jsonResponse({ ok: false, error: "Verification failed" }, 403);
 
   try {
     await sendContactEmail(submission, env);
-  } catch (error) {
-    console.error("Contact email delivery failed", error instanceof Error ? error.message : "Unknown error");
+  } catch {
+    console.error("contact_resend_error");
     return jsonResponse({ ok: false, error: "Unable to send submission" }, 502);
   }
 
