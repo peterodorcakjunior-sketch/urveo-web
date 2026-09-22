@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./DArtExperience.css";
+import DArtHome from "./DArtHome";
 
 const pizzas = [
   { id: 1, name: "Margherita", description: "Rajčinová omáčka, mozzarella", price: 6.7, prices: [6.7, 8.4, 8.9], tone: "margherita", image: "/dart-pizzas/margherita.webp" },
@@ -21,7 +22,10 @@ const extraIngredients = [
   "Fazuľa", "Pór", "Ananás", "Kapary", "Chilli papričky", "Jalapeño",
 ];
 
+// Keep the existing ordering screens 0-4; -1 is the new home screen.
+const HOME_SCREEN = -1;
 const flowCopy = [
+  ["Vstúpte do D•ART aplikácie", "Začnite cez Zobraziť menu alebo otvorte košík. História objednávok, obľúbené a profil nie sú súčasťou tejto ukážky."],
   ["Ponuka presne ako v aplikácii", "Zákazník si prezerá reálnu ponuku, zloženie aj cenu každej pizze."],
   ["Každý detail pod kontrolou", "Veľkosť, tvar, cesto, syr aj ingrediencie navyše sa okamžite premietnu do ceny."],
   ["Jasný obsah aj výsledná cena", "Košík oddeľuje cenu jedla a balné a umožňuje meniť počet kusov."],
@@ -29,7 +33,7 @@ const flowCopy = [
   ["Bezpečný koniec ukážky", "Webové demo ukáže celý proces, ale nikdy nespustí skutočnú platbu ani objednávku."],
 ];
 
-const steps = ["Pizza", "Detail", "Košík", "Dokončenie", "Hotovo"];
+const steps = ["Domov", "Pizza", "Detail", "Košík", "Dokončenie", "Hotovo"];
 const money = value => `${value.toFixed(2).replace(".", ",")} €`;
 
 function PizzaArt({ image, tone = "margherita", compact = false }) {
@@ -61,7 +65,7 @@ function AppHeader({ title, onBack, cartCount, onCart }) {
   );
 }
 
-function PhoneFrame({ children }) {
+function PhoneFrame({ children, home = false }) {
   const [currentTime, setCurrentTime] = useState(() => new Date());
 
   useEffect(() => {
@@ -75,7 +79,7 @@ function PhoneFrame({ children }) {
   }).format(currentTime);
 
   return (
-    <div className="real-phone-shell">
+    <div className={`real-phone-shell${home ? " is-home" : ""}`}>
       <div className="real-phone-buttons"/>
       <div className="real-phone-screen">
         <div className="real-status"><b>{formattedTime}</b><span/><i/><em/></div>
@@ -99,7 +103,9 @@ export default function DArtExperience({ onClose }) {
     };
   }, []);
   const dialogRef = useRef(null);
-  const [screen, setScreen] = useState(0);
+  const [screen, setScreen] = useState(HOME_SCREEN);
+  const [cartReturnScreen, setCartReturnScreen] = useState(HOME_SCREEN);
+  const stepIndex = screen + 1;
   const [product, setProduct] = useState(pizzas[0]);
   const [size, setSize] = useState("small");
   const [heart, setHeart] = useState(false);
@@ -202,6 +208,25 @@ export default function DArtExperience({ onClose }) {
     };
   }, [onClose]);
 
+  useEffect(() => {
+    // A removed screen must not leave keyboard focus outside the dialog.
+    dialogRef.current?.querySelector(".real-app-page")?.focus({ preventScroll: true });
+  }, [screen]);
+
+  const openCart = () => {
+    if (screen === 2) return;
+    setCartReturnScreen(screen === 4 ? HOME_SCREEN : screen);
+    setScreen(2);
+  };
+
+  const returnFromCart = () => {
+    // Removing the last item must never return to an empty checkout.
+    setScreen(cartReturnScreen === 3 && cart.length === 0 ? 0 : cartReturnScreen);
+  };
+
+  const canNavigateTo = target => target <= 0 || target === 2
+    || (target <= screen && (target !== 3 || cart.length > 0));
+
   const resetConfiguration = item => {
     setProduct(item);
     setSize("small");
@@ -242,6 +267,7 @@ export default function DArtExperience({ onClose }) {
       unitPrice: configuredUnitPrice,
       quantity: 1,
     }]);
+    setCartReturnScreen(1);
     setScreen(2);
   };
 
@@ -252,7 +278,8 @@ export default function DArtExperience({ onClose }) {
   };
 
   const resetDemo = () => {
-    setScreen(0);
+    setScreen(HOME_SCREEN);
+    setCartReturnScreen(HOME_SCREEN);
     setCart([]);
     setSuccess(false);
     setDelivery("Rozvoz");
@@ -261,6 +288,10 @@ export default function DArtExperience({ onClose }) {
   };
 
   const checkout = () => {
+    if (cart.length === 0) {
+      setScreen(2);
+      return;
+    }
     setSuccess(true);
     setScreen(4);
   };
@@ -279,17 +310,21 @@ export default function DArtExperience({ onClose }) {
 
       <div className="case-layout">
         <div className="case-context" key={screen}>
-          <span>0{screen + 1} / 05</span>
-          <h3>{flowCopy[screen][0]}</h3>
-          <p>{flowCopy[screen][1]}</p>
+          <span>0{stepIndex + 1} / 0{steps.length}</span>
+          <h3>{flowCopy[stepIndex][0]}</h3>
+          <p>{flowCopy[stepIndex][1]}</p>
           <small>INTERAKTÍVNY PROTOTYP · REÁLNY D•ART FLOW</small>
         </div>
 
         <div className="phone-column">
-          <PhoneFrame>
+          <PhoneFrame home={screen === HOME_SCREEN}>
+            {screen === HOME_SCREEN && (
+              <DArtHome cartCount={cartCount} onMenu={() => setScreen(0)} onCart={openCart}/>
+            )}
+
             {screen === 0 && (
-              <section className="real-app-page real-menu-page">
-                <AppHeader title="Pizza" cartCount={cartCount} onCart={() => setScreen(2)}/>
+              <section className="real-app-page real-menu-page" tabIndex="-1">
+                <AppHeader title="Pizza" onBack={() => setScreen(HOME_SCREEN)} cartCount={cartCount} onCart={openCart}/>
                 <div className="real-pizza-list">
                   {pizzas.map(item => (
                     <button className="real-pizza-card" type="button" key={item.id} onClick={() => resetConfiguration(item)}>
@@ -307,8 +342,8 @@ export default function DArtExperience({ onClose }) {
             )}
 
             {screen === 1 && (
-              <section className="real-app-page real-detail-page">
-                <AppHeader title={`${product.id}. ${product.name}`} onBack={() => setScreen(0)} cartCount={cartCount} onCart={() => setScreen(2)}/>
+              <section className="real-app-page real-detail-page" tabIndex="-1">
+                <AppHeader title={`${product.id}. ${product.name}`} onBack={() => setScreen(0)} cartCount={cartCount} onCart={openCart}/>
                 <PizzaArt image={product.image} tone={product.tone}/>
                 <div className="real-detail-copy">
                   <h3>{product.id}. {product.name}</h3>
@@ -405,8 +440,8 @@ export default function DArtExperience({ onClose }) {
             )}
 
             {screen === 2 && (
-              <section className="real-app-page real-cart-page">
-                <AppHeader title="Košík" onBack={() => setScreen(1)} cartCount={cartCount} onCart={() => setScreen(2)}/>
+              <section className="real-app-page real-cart-page" tabIndex="-1">
+                <AppHeader title="Košík" onBack={returnFromCart} cartCount={cartCount} onCart={openCart}/>
                 {cart.length > 0 ? (
                   <>
                     <div className="real-cart-items">
@@ -448,9 +483,9 @@ export default function DArtExperience({ onClose }) {
             )}
 
             {screen === 3 && (
-              <section className="real-app-page real-checkout-page">
-                <AppHeader title="Dokončenie objednávky" onBack={() => setScreen(2)} cartCount={cartCount} onCart={() => setScreen(2)}/>
-                <div className="real-profile-notice">✓ <span>Údaje boli vyplnené z vášho profilu.</span></div>
+              <section className="real-app-page real-checkout-page" tabIndex="-1">
+                <AppHeader title="Dokončenie objednávky" onBack={() => setScreen(2)} cartCount={cartCount} onCart={openCart}/>
+                <div className="real-profile-notice">✓ <span>Predvyplnené ukážkové údaje. Neodosielajú sa.</span></div>
 
                 <div className="real-option-card">
                   <h4>Spôsob prevzatia</h4>
@@ -485,7 +520,7 @@ export default function DArtExperience({ onClose }) {
 
                 <div className="real-option-card">
                   <h4>Kontaktné údaje</h4>
-                  <label><span>Meno a priezvisko</span><input value="Lexo Lexo" readOnly/></label>
+                  <label><span>Meno a priezvisko</span><input value="Demo zákazník" readOnly/></label>
                   <label><span>Telefónne číslo</span><input value="+421900000000" readOnly/></label>
                 </div>
 
@@ -533,8 +568,8 @@ export default function DArtExperience({ onClose }) {
             )}
 
             {screen === 4 && success && (
-              <section className="real-app-page real-success-page">
-                <AppHeader title="Interaktívna ukážka" cartCount={0} onCart={() => setScreen(2)}/>
+              <section className="real-app-page real-success-page" tabIndex="-1">
+                <AppHeader title="Interaktívna ukážka" cartCount={0} onCart={openCart}/>
                 <div className="real-success">
                   <div>✓</div>
                   <small>DEMO JE DOKONČENÉ</small>
@@ -547,14 +582,20 @@ export default function DArtExperience({ onClose }) {
             )}
           </PhoneFrame>
 
-          <nav className="case-progress" aria-label="Postup ukážky">
+          <nav className="case-progress has-home" aria-label="Postup ukážky">
             {steps.map((label, index) => (
               <button
                 type="button"
                 key={label}
-                className={screen === index ? "active" : screen > index ? "done" : ""}
-                onClick={() => index <= screen && setScreen(index)}
-                disabled={index > screen}
+                className={stepIndex === index ? "active" : stepIndex > index ? "done" : ""}
+                aria-current={stepIndex === index ? "step" : undefined}
+                onClick={() => {
+                  const target = index - 1;
+                  if (!canNavigateTo(target)) return;
+                  if (target === 2) openCart();
+                  else setScreen(target);
+                }}
+                disabled={!canNavigateTo(index - 1)}
               >
                 <span>0{index + 1}</span>{label}
               </button>

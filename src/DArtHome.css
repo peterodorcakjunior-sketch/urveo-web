@@ -1,0 +1,113 @@
+/* The live home is deliberately scoped to DArtExperience.
+   Both photographs are the verified assets already used by the small showcase. */
+.case-experience .real-phone-shell.is-home .real-status { background: transparent; }
+.case-experience .real-home-page {
+  --dart-home-red: #ed2724;
+  --dart-home-muted: #a2a39d;
+  container-type: inline-size;
+  isolation: isolate;
+  padding: 0;
+  overflow: hidden;
+  background: #090a09;
+  color: #f5f5f3;
+  font-family: "DM Sans", sans-serif;
+}
+.case-experience .real-app-page:focus { outline: none; }
+.real-home-page svg { display: block; flex: none; width: 6.2cqw; height: 6.2cqw; }
+.real-home-page .dart-home-hero { position: absolute; inset: 0 0 auto; height: 70%; }
+.real-home-page .dart-home-restaurant {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+  object-position: 50% 48%; filter: brightness(.86) saturate(.94);
+}
+.real-home-page .dart-home-shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.06) 35%, rgba(0,0,0,.28) 60%, rgba(0,0,0,.8) 85%, #090a09);
+}
+.real-home-page .dart-home-header {
+  position: absolute; z-index: 2; top: 10.5%; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 4cqw;
+}
+.real-home-page .dart-home-logo {
+  color: #f5f5f3; font: 800 7cqw/1 "Manrope", sans-serif;
+  letter-spacing: .55cqw; white-space: nowrap;
+}
+.real-home-page .dart-home-logo > span { color: var(--dart-home-red); }
+.real-home-page .dart-home-header-actions { display: flex; align-items: center; gap: 2.5cqw; }
+.real-home-page .dart-home-language {
+  display: grid; place-items: center; width: 8.5cqw; height: 8.5cqw;
+  border-radius: 50%; background: var(--dart-home-red);
+  color: #fff; font-size: 2.8cqw; font-weight: 800;
+}
+.real-home-page .dart-home-english {
+  padding: 0; border: 0; background: none; color: #e5e5e3;
+  font-size: 2.6cqw; font-weight: 800; cursor: not-allowed;
+}
+.real-home-page .dart-home-cart {
+  position: relative; display: grid; place-items: center;
+  width: max(44px, 10cqw); height: max(44px, 10cqw);
+  padding: 0; border: 0; border-radius: 3cqw; background: none; color: #f5f5f3; cursor: pointer;
+}
+.real-home-page .dart-home-cart svg { width: 5.6cqw; height: 5.6cqw; }
+.real-home-page .dart-home-count {
+  position: absolute; right: 0; top: 0; display: grid; place-items: center;
+  min-width: 4.3cqw; height: 4.3cqw; padding: 0 .8cqw; border-radius: 9px;
+  background: var(--dart-home-red); color: #fff; font-size: 2.4cqw; font-weight: 800;
+}
+.real-home-page .dart-home-greeting { position: absolute; top: 56.5%; left: 3.5cqw; right: 3.5cqw; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+.real-home-page .dart-home-greeting h3 { margin: 0; color: #f5f5f3; font: 700 7.7cqw/1.25 "DM Sans", sans-serif; letter-spacing: -.1cqw; }
+.real-home-page .dart-home-greeting p { margin: 1.4cqw 0 0; font-size: 6.5cqw; line-height: 1.3; letter-spacing: -.05cqw; white-space: nowrap; }
+.real-home-page .dart-home-dots { display: flex; align-items: center; gap: 1.4cqw; height: 2cqw; margin-top: 6cqw; }
+.real-home-page .dart-home-dots i { width: 2cqw; height: 2cqw; border-radius: 2cqw; background: #898987; }
+.real-home-page .dart-home-dots i:first-child { width: 6cqw; background: var(--dart-home-red); }
+.real-home-page .dart-home-dots i:last-child { background: #666663; }
+
+.real-home-page .dart-home-info {
+  position: absolute; z-index: 3; top: 55.8%; left: 2.8cqw; right: 2.8cqw; height: 14%;
+  display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); padding: 3cqw 1cqw;
+  border: 1px solid rgba(255,255,255,.14); border-radius: 7cqw;
+  background: #191a19; box-shadow: 0 2cqw 5cqw rgba(0,0,0,.3);
+}
+.real-home-page .dart-home-info > div { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.65cqw; min-width: 0; }
+.real-home-page .dart-home-info > div + div::before { content: ""; position: absolute; top: 14%; bottom: 14%; left: 0; width: 1px; background: rgba(255,255,255,.13); }
+.real-home-page .dart-home-info svg { margin-bottom: 1cqw; color: var(--dart-home-red); }
+.real-home-page .dart-home-info strong { font-size: 3.35cqw; line-height: 1.2; font-weight: 800; letter-spacing: .06cqw; white-space: nowrap; }
+.real-home-page .dart-home-info small { color: #969694; font-size: 2.5cqw; line-height: 1.3; white-space: nowrap; }
+
+.real-home-page .dart-home-menu {
+  position: absolute; z-index: 2; top: 70.2%; left: 2.8cqw; right: 2.8cqw; height: 15.5%;
+  overflow: hidden; border: 1px solid rgba(255,255,255,.055); border-radius: 7cqw; background: #171917;
+}
+.real-home-page .dart-home-menu > img { position: absolute; right: 0; top: 0; width: 59%; height: 100%; object-fit: cover; }
+.real-home-page .dart-home-menu::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #171917 35%, rgba(23,25,23,.5) 55%, transparent 85%); }
+.real-home-page .dart-home-menu-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; padding: 3.8cqw 4.3cqw; }
+.real-home-page .dart-home-menu h4 { margin: 0; font-size: 4.9cqw; font-weight: 800; line-height: 1.2; letter-spacing: .23cqw; }
+.real-home-page .dart-home-menu p { margin: 1.8cqw 0 2.4cqw; font-size: 2.85cqw; line-height: 1.4; color: #c3c3be; }
+.real-home-page .dart-home-menu button {
+  min-height: 36px; padding: 2.1cqw 3.4cqw; border: 0; border-radius: 3.3cqw;
+  background: var(--dart-home-red); color: #fff; cursor: pointer;
+  font-size: max(10px, 3cqw); font-weight: 800; line-height: 1.15; letter-spacing: .05cqw;
+}
+.real-home-page .dart-home-nav {
+  position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 9.7%;
+  display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); align-items: start;
+  padding-top: 2.3cqw; border-top: 1px solid rgba(255,255,255,.09); background: #111210;
+}
+.real-home-page .dart-home-nav > button {
+  position: relative; display: flex; min-width: 0; min-height: 44px;
+  flex-direction: column; align-items: center; gap: 2.1cqw; padding: 0 0 1.5cqw;
+  border: 0; border-radius: 3cqw; background: none; color: var(--dart-home-muted);
+  font-size: 2.65cqw; font-weight: 500; line-height: 1.3; text-align: center; cursor: pointer;
+}
+.real-home-page .dart-home-nav > button:disabled { opacity: .65; cursor: not-allowed; }
+.real-home-page .dart-home-nav > button.is-current { color: var(--dart-home-red); font-weight: 800; }
+.real-home-page .dart-home-nav-icon { position: relative; display: grid; place-items: center; width: 15.5cqw; height: 8.5cqw; border-radius: 7cqw; }
+.real-home-page .dart-home-nav-icon svg { width: 5.6cqw; height: 5.6cqw; }
+.real-home-page .is-current .dart-home-nav-icon { background: rgba(237,39,36,.17); }
+.real-home-page .dart-home-menu button:hover { background: #ff3830; }
+.real-home-page .dart-home-cart:hover { background: rgba(237,39,36,.14); }
+.case-experience .case-progress.has-home { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: clamp(4px,1vw,12px); width: 100%; max-width: 416px; margin-inline: auto; }
+.case-experience .case-progress.has-home button { min-width: 0; min-height: 40px; white-space: nowrap; font-size: clamp(7px,.8vw,9px); }
+@media (max-width: 520px) {
+  .case-experience .case-progress.has-home { max-width: 390px; gap: 4px; }
+  .real-home-page .dart-home-menu { height: 16%; }
+}
