@@ -49,12 +49,14 @@ function CartIcon({ count = 0 }) {
   );
 }
 
-function AppHeader({ title, onBack, cartCount }) {
+function AppHeader({ title, onBack, cartCount, onCart }) {
   return (
     <header className="real-app-header">
       {onBack ? <button type="button" onClick={onBack} aria-label="Späť">‹</button> : <span/>}
       <strong>{title}</strong>
-      <CartIcon count={cartCount}/>
+      <button type="button" className="real-cart-button" onClick={onCart} aria-label={cartCount ? `Otvoriť košík, ${cartCount} položiek` : "Otvoriť košík"}>
+        <CartIcon count={cartCount}/>
+      </button>
     </header>
   );
 }
@@ -287,7 +289,7 @@ export default function DArtExperience({ onClose }) {
           <PhoneFrame>
             {screen === 0 && (
               <section className="real-app-page real-menu-page">
-                <AppHeader title="Pizza" cartCount={cartCount}/>
+                <AppHeader title="Pizza" cartCount={cartCount} onCart={() => setScreen(2)}/>
                 <div className="real-pizza-list">
                   {pizzas.map(item => (
                     <button className="real-pizza-card" type="button" key={item.id} onClick={() => resetConfiguration(item)}>
@@ -306,7 +308,7 @@ export default function DArtExperience({ onClose }) {
 
             {screen === 1 && (
               <section className="real-app-page real-detail-page">
-                <AppHeader title={`${product.id}. ${product.name}`} onBack={() => setScreen(0)} cartCount={cartCount}/>
+                <AppHeader title={`${product.id}. ${product.name}`} onBack={() => setScreen(0)} cartCount={cartCount} onCart={() => setScreen(2)}/>
                 <PizzaArt image={product.image} tone={product.tone}/>
                 <div className="real-detail-copy">
                   <h3>{product.id}. {product.name}</h3>
@@ -404,7 +406,7 @@ export default function DArtExperience({ onClose }) {
 
             {screen === 2 && (
               <section className="real-app-page real-cart-page">
-                <AppHeader title="Košík" onBack={() => setScreen(1)} cartCount={cartCount}/>
+                <AppHeader title="Košík" onBack={() => setScreen(1)} cartCount={cartCount} onCart={() => setScreen(2)}/>
                 {cart.length > 0 ? (
                   <>
                     <div className="real-cart-items">
@@ -447,7 +449,7 @@ export default function DArtExperience({ onClose }) {
 
             {screen === 3 && (
               <section className="real-app-page real-checkout-page">
-                <AppHeader title="Dokončenie objednávky" onBack={() => setScreen(2)} cartCount={cartCount}/>
+                <AppHeader title="Dokončenie objednávky" onBack={() => setScreen(2)} cartCount={cartCount} onCart={() => setScreen(2)}/>
                 <div className="real-profile-notice">✓ <span>Údaje boli vyplnené z vášho profilu.</span></div>
 
                 <div className="real-option-card">
@@ -532,7 +534,7 @@ export default function DArtExperience({ onClose }) {
 
             {screen === 4 && success && (
               <section className="real-app-page real-success-page">
-                <AppHeader title="Interaktívna ukážka" cartCount={0}/>
+                <AppHeader title="Interaktívna ukážka" cartCount={0} onCart={() => setScreen(2)}/>
                 <div className="real-success">
                   <div>✓</div>
                   <small>DEMO JE DOKONČENÉ</small>
