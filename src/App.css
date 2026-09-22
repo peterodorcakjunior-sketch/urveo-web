@@ -482,3 +482,14 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 /* Real DART restaurant photography */
 .dart-real-restaurant{background-size:cover!important;background-position:center 43%!important;background-repeat:no-repeat!important}
 .dart-real-restaurant:before{display:none}
+
+/* DART final brand alignment */
+.dart-real-restaurant{position:absolute;inset:0;overflow:hidden;background:#0a0a0a!important}
+.dart-real-restaurant img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 45%;filter:brightness(.72) contrast(1.04) saturate(.95)}
+.dart-real-restaurant:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.12) 42%,rgba(0,0,0,.8) 100%);pointer-events:none}
+.dart-product-visual{background:radial-gradient(circle at 58% 43%,rgba(239,45,35,.16),transparent 37%),radial-gradient(circle at 78% 73%,rgba(239,45,35,.09),transparent 28%),linear-gradient(145deg,#100d0e,#080809 72%)}
+.dart-product-visual:before{border-color:rgba(240,45,35,.24);box-shadow:0 0 45px rgba(240,45,35,.035)}
+.dart-product-visual:after{border-color:rgba(240,45,35,.09)}
+.dart-ambient{background:rgba(240,45,35,.105);filter:blur(82px)}
+.dart-admin{box-shadow:0 42px 90px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.16),-15px -8px 62px rgba(240,45,35,.1)}
+.featured-project-copy{background:radial-gradient(circle at 20% 83%,rgba(240,45,35,.065),transparent 31%),#0d0d10}
