@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import dartRestaurant from "./assets/dart-restaurant.jpg";
 import "./App.css";
 import urveoLogo from "./assets/urveo-logo.png";
 import DArtExperience from "./DArtExperience";
@@ -82,13 +83,19 @@ function DArtAdminSurface() {
 }
 
 function DArtMobileSurface() {
+  const [currentTime, setCurrentTime] = useState(() => new Date().toLocaleTimeString("sk-SK", { hour: "2-digit", minute: "2-digit" }));
+  useEffect(() => {
+    const updateTime = () => setCurrentTime(new Date().toLocaleTimeString("sk-SK", { hour: "2-digit", minute: "2-digit" }));
+    const timer = window.setInterval(updateTime, 30000);
+    return () => window.clearInterval(timer);
+  }, []);
   return (
     <div className="dart-real-mobile" aria-hidden="true">
-      <div className="dart-real-status"><b>18:56</b><span>••• ◔ ▰</span></div>
+      <div className="dart-real-status"><b>{currentTime}</b><span>••• ◔ ▰</span></div>
       <div className="dart-real-nav"><strong>D<span>•</span>ART</strong><div><b>SK</b><i>EN</i><em>⌑</em></div></div>
       <div className="dart-real-hero">
-        <div className="dart-real-restaurant"/>
-        <div className="dart-real-greeting"><b>Dobrý večer, Lexo,</b><span>na čo máte dnes chuť?</span><i>━ • •</i></div>
+        <div className="dart-real-restaurant" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.76)), url(${dartRestaurant})` }}/>
+        <div className="dart-real-greeting"><b>Dobrý večer,</b><span>na čo máte dnes chuť?</span><i>━ • •</i></div>
       </div>
       <div className="dart-real-info">
         <div><b>◷</b><strong>25 – 35 min</strong><small>čas prípravy</small></div>
