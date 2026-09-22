@@ -1,0 +1,350 @@
+/* DART showcase phone: proportional styling of the existing live React UI.
+   Imported after App.css; scoped so the interactive demo and URVEO keep their layout.
+   Icons are vector masks, not font glyphs. Restaurant asset is intentionally unchanged. */
+.dart-product-visual .dart-phone {
+  width: 224px;
+  height: auto;
+  aspect-ratio: 420 / 934;
+  padding: 6px;
+  border-radius: 34px;
+}
+.dart-product-visual .dart-phone::before {
+  width: 31%;
+  height: 3.5%;
+  top: 7px;
+  left: 34.5%;
+  border-radius: 0 0 13px 13px;
+  background: #010101;
+}
+.dart-phone .dart-phone-screen { border-radius: 28px; }
+.dart-phone .dart-real-mobile {
+  --dart-red: #ed2724;
+  --dart-muted: #969694;
+  position: absolute;
+  inset: 0;
+  container-type: inline-size;
+  overflow: hidden;
+  isolation: isolate;
+  background: #090a09;
+  color: #f5f5f3;
+  font-family: "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.dart-real-mobile *, .dart-real-mobile *::before, .dart-real-mobile *::after {
+  box-sizing: border-box;
+}
+.dart-real-mobile .dart-real-hero {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 70%;
+  overflow: hidden;
+}
+.dart-real-mobile .dart-real-restaurant {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.dart-real-mobile .dart-real-restaurant img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 48%;
+  filter: brightness(.86) saturate(.94);
+}
+.dart-real-mobile .dart-real-restaurant::before { display: none; }
+.dart-real-mobile .dart-real-restaurant::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.20) 0%, rgba(0,0,0,.06) 35%, rgba(0,0,0,.28) 60%, rgba(0,0,0,.80) 85%, #090a09 100%);
+  pointer-events: none;
+}
+.dart-real-mobile .dart-real-status {
+  position: absolute;
+  z-index: 5;
+  inset: 0 0 auto;
+  height: 5.2%;
+  padding: 0 6.5cqw 0 10cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  font-size: 4.2cqw;
+  line-height: 1;
+}
+.dart-real-mobile .dart-real-status b {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.1cqw;
+}
+.dart-real-mobile .dart-real-status > span {
+  display: block;
+  width: 20cqw;
+  height: 4.2cqw;
+  font-size: 0;
+  background: var(--dart-status-icons) center / contain no-repeat;
+}
+.dart-real-mobile .dart-real-nav {
+  position: absolute;
+  z-index: 4;
+  top: 7.7%;
+  left: 0;
+  right: 0;
+  height: 4.5%;
+  padding: 0 4cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dart-real-mobile .dart-real-nav > strong {
+  font-family: "Manrope", sans-serif;
+  font-size: 7cqw;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .55cqw;
+  white-space: nowrap;
+}
+.dart-real-mobile .dart-real-nav > strong span { color: var(--dart-red); }
+.dart-real-mobile .dart-real-nav > div { display: flex; align-items: center; gap: 3.3cqw; }
+.dart-real-mobile .dart-real-nav > div b {
+  display: grid;
+  place-items: center;
+  width: 8cqw;
+  height: 8cqw;
+  border-radius: 50%;
+  background: var(--dart-red);
+  font-size: 2.8cqw;
+  font-weight: 800;
+}
+.dart-real-mobile .dart-real-nav i { font-size: 2.6cqw; font-style: normal; font-weight: 800; }
+.dart-real-mobile .dart-real-nav em {
+  display: block;
+  width: 5.6cqw;
+  height: 5.6cqw;
+  margin-left: 3cqw;
+  font-size: 0;
+  background: #f4f4f2;
+  -webkit-mask: var(--dart-icon-cart) center / contain no-repeat;
+  mask: var(--dart-icon-cart) center / contain no-repeat;
+}
+.dart-real-mobile .dart-real-greeting {
+  position: absolute;
+  z-index: 2;
+  top: 56.5%;
+  bottom: auto;
+  left: 3.5cqw;
+  right: 3.5cqw;
+  display: flex;
+  flex-direction: column;
+  text-shadow: 0 1px 8px rgba(0,0,0,.5);
+}
+.dart-real-mobile .dart-real-greeting b {
+  font-size: 7.7cqw;
+  font-weight: 700;
+  letter-spacing: -.1cqw;
+  line-height: 1.25;
+}
+.dart-real-mobile .dart-real-greeting > span {
+  margin-top: 1.4cqw;
+  font-size: 6.5cqw;
+  font-weight: 400;
+  letter-spacing: -.05cqw;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.dart-real-mobile .dart-real-greeting i {
+  position: relative;
+  display: block;
+  width: 18cqw;
+  height: 2cqw;
+  margin-top: 6cqw;
+  font-size: 0;
+}
+.dart-real-mobile .dart-real-greeting i::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6cqw;
+  border-radius: 2cqw;
+  background: var(--dart-red);
+}
+.dart-real-mobile .dart-real-greeting i::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 7.6cqw;
+  width: 2cqw;
+  height: 2cqw;
+  border-radius: 50%;
+  background: #898987;
+  box-shadow: 3.4cqw 0 0 #666663;
+}
+.dart-real-mobile .dart-real-info {
+  position: absolute;
+  z-index: 3;
+  top: 55.8%;
+  left: 2.8cqw;
+  right: 2.8cqw;
+  height: 14%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  padding: 3cqw 1cqw;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 7cqw;
+  background: #191a19;
+  box-shadow: 0 2cqw 5cqw rgba(0,0,0,.30);
+}
+.dart-real-mobile .dart-real-info > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.65cqw;
+  min-width: 0;
+}
+.dart-real-mobile .dart-real-info > div + div::before {
+  content: "";
+  position: absolute;
+  top: 14%;
+  bottom: 14%;
+  left: 0;
+  width: 1px;
+  background: rgba(255,255,255,.13);
+}
+.dart-real-mobile .dart-real-info > div > b {
+  display: block;
+  width: 6.2cqw;
+  height: 6.2cqw;
+  margin-bottom: 1cqw;
+  color: var(--dart-red);
+  font-size: 0;
+  background: currentColor;
+  -webkit-mask: var(--dart-info-icon) center / contain no-repeat;
+  mask: var(--dart-info-icon) center / contain no-repeat;
+}
+.dart-real-mobile .dart-real-info > div:nth-child(1) { --dart-info-icon: var(--dart-icon-clock); }
+.dart-real-mobile .dart-real-info > div:nth-child(2) { --dart-info-icon: var(--dart-icon-delivery); }
+.dart-real-mobile .dart-real-info > div:nth-child(3) { --dart-info-icon: var(--dart-icon-box); }
+.dart-real-mobile .dart-real-info strong { font-size: 3.35cqw; line-height: 1.2; font-weight: 800; letter-spacing: .06cqw; white-space: nowrap; }
+.dart-real-mobile .dart-real-info small { color: var(--dart-muted); font-size: 2.5cqw; line-height: 1.3; white-space: nowrap; }
+.dart-real-mobile .dart-real-menu {
+  position: absolute;
+  z-index: 2;
+  top: 70.2%;
+  left: 2.8cqw;
+  right: 2.8cqw;
+  height: 14.2%;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.055);
+  border-radius: 7cqw;
+  background: #171917;
+}
+.dart-real-mobile .dart-real-menu > i {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 59%;
+  opacity: 1;
+  transform: none;
+  background: url("./assets/dart-daily-menu.webp") center / cover no-repeat;
+}
+.dart-real-mobile .dart-real-menu > i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #171917, rgba(23,25,23,.50) 23%, transparent 65%);
+}
+.dart-real-mobile .dart-real-menu > div {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4.1cqw 4.3cqw;
+}
+.dart-real-mobile .dart-real-menu strong { font-size: 4.9cqw; font-weight: 800; line-height: 1.2; letter-spacing: .23cqw; }
+.dart-real-mobile .dart-real-menu small { font-size: 2.85cqw; line-height: 1.4; color: #c3c3be; margin: 1.8cqw 0 2.9cqw; }
+.dart-real-mobile .dart-real-menu b {
+  display: inline-block;
+  padding: 2.1cqw 3.4cqw;
+  border-radius: 3.3cqw;
+  background: var(--dart-red);
+  color: #fff;
+  font-size: 3cqw;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: .05cqw;
+}
+.dart-real-mobile .dart-real-bottom {
+  position: absolute;
+  z-index: 4;
+  inset: auto 0 0;
+  height: 9.7%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0,1fr));
+  align-items: start;
+  padding-top: 2.3cqw;
+  border-top: 1px solid rgba(255,255,255,.09);
+  background: #111210;
+}
+.dart-real-mobile .dart-real-bottom > b,
+.dart-real-mobile .dart-real-bottom > span {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.1cqw;
+  padding-top: 1.1cqw;
+  min-width: 0;
+  font-size: 0;
+  color: #a2a39d;
+  text-align: center;
+}
+.dart-real-mobile .dart-real-bottom > b { color: var(--dart-red); }
+.dart-real-mobile .dart-real-bottom > *::before {
+  content: "";
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 5.6cqw;
+  height: 5.6cqw;
+  background: currentColor;
+  -webkit-mask: var(--dart-nav-icon) center / contain no-repeat;
+  mask: var(--dart-nav-icon) center / contain no-repeat;
+}
+.dart-real-mobile .dart-real-bottom > b::after {
+  content: "";
+  position: absolute;
+  top: -.5cqw;
+  width: 15.5cqw;
+  height: 8.5cqw;
+  border-radius: 7cqw;
+  background: rgba(237,39,36,.17);
+}
+.dart-real-mobile .dart-real-bottom > :nth-child(1) { --dart-nav-icon: var(--dart-icon-home); }
+.dart-real-mobile .dart-real-bottom > :nth-child(2) { --dart-nav-icon: var(--dart-icon-orders); }
+.dart-real-mobile .dart-real-bottom > :nth-child(3) { --dart-nav-icon: var(--dart-icon-heart); }
+.dart-real-mobile .dart-real-bottom > :nth-child(4) { --dart-nav-icon: var(--dart-icon-cart); }
+.dart-real-mobile .dart-real-bottom > :nth-child(5) { --dart-nav-icon: var(--dart-icon-profile); }
+.dart-real-mobile .dart-real-bottom small { font-size: 2.6cqw; line-height: 1.2; font-weight: 500; }
+.dart-real-mobile .dart-real-bottom > b small { font-weight: 800; }
+@media (max-width:760px) {
+  .dart-product-visual .dart-phone { width: 154px; height: auto; padding: 5px; border-radius: 26px; }
+  .dart-phone .dart-phone-screen { border-radius: 21px; }
+  .dart-product-visual .dart-phone::before { top: 5px; border-radius: 0 0 9px 9px; }
+}
+
+/* Self-contained, resolution-independent icons used only by this preview. */
+.dart-real-mobile {
+  --dart-icon-clock: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M12%206v6l4%202%22%2F%3E%3C%2Fsvg%3E");
+  --dart-icon-delivery: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%226%22%20cy%3D%2218%22%20r%3D%223%22%2F%3E%3Ccircle%20cx%3D%2219%22%20cy%3D%2218%22%20r%3D%223%22%2F%3E%3Cpath%20d%3D%22M8.5%2018H15l3-9h-4M13%206h4l2%209M3%2011h6v4H3zM6%208h4%22%2F%3E%3C%2Fsvg%3E");
+  --dart-icon-box: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%208h16v13H4zM3%203h18v5H3zM9%2012h6%22%2F%3E%3C%2Fsvg%3E");
+  --dart-icon-cart: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M2%203h3l2.5%2012h11L21%207H6M8%2018h10%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%2221%22%20r%3D%221%22%2F%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2221%22%20r%3D%221%22%2F%3E%3C%2Fsvg%3E");
+  --dart-icon-orders: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%203H4v18h16V3h-2M9%203h6v4H9zM8%2011h8M8%2015h8M8%2018h5%22%2F%3E%3C%2Fsvg%3E");
+  --dart-icon-heart: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20.8%204.8a5.5%205.5%200%200%200-7.8%200L12%205.9l-1.1-1.1a5.5%205.5%200%200%200-7.8%207.8L12%2021l8.8-8.4a5.5%205.5%200%200%200%200-7.8Z%22%2F%3E%3C%2Fsvg%3E");
+  --dart-icon-profile: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%227%22%20r%3D%223.5%22%2F%3E%3Cpath%20d%3D%22M4%2021v-2a8%206%200%200%201%2016%200v2ZM8%2016h8%22%2F%3E%3C%2Fsvg%3E");
+  --dart-icon-home: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20fill%3D%22black%22%20stroke%3D%22none%22%20d%3D%22m12%202%2011%209h-3v11h-6v-7h-4v7H4V11H1Z%22%2F%3E%3C%2Fsvg%3E");
+  --dart-status-icons: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2084%2018%22%3E%3Cg%20fill%3D%22%23bfc0bc%22%3E%3Crect%20x%3D%221%22%20y%3D%2211%22%20width%3D%223%22%20height%3D%225%22%20rx%3D%22.8%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%228%22%20width%3D%223%22%20height%3D%228%22%20rx%3D%22.8%22%2F%3E%3Crect%20x%3D%2211%22%20y%3D%225%22%20width%3D%223%22%20height%3D%2211%22%20rx%3D%22.8%22%2F%3E%3Crect%20x%3D%2216%22%20y%3D%222%22%20width%3D%223%22%20height%3D%2214%22%20rx%3D%22.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23f5f5f3%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M29%206q9-8%2018%200M32%2010q6-5%2012%200M36%2013q2-2%204%200%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2238%22%20cy%3D%2216%22%20r%3D%221.2%22%20fill%3D%22%23f5f5f3%22%2F%3E%3Crect%20x%3D%2256%22%20y%3D%223%22%20width%3D%2224%22%20height%3D%2213%22%20rx%3D%223.5%22%20fill%3D%22none%22%20stroke%3D%22%23c3c4bf%22%2F%3E%3Crect%20x%3D%2258%22%20y%3D%225%22%20width%3D%2220%22%20height%3D%229%22%20rx%3D%222%22%20fill%3D%22%23f5f5f3%22%2F%3E%3Cpath%20d%3D%22M82%207v5%22%20stroke%3D%22%23bfc0bc%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+}
