@@ -106,3 +106,20 @@
 .case-progress button.active:before,.case-progress button.done:before{background:#f02d23;box-shadow:0 0 10px rgba(240,45,35,.52)}
 .case-experience button:focus-visible{outline-color:rgba(255,92,83,.92);box-shadow:0 0 0 3px rgba(240,45,35,.14)}
 .real-phone-shell{box-shadow:0 45px 100px rgba(0,0,0,.65),inset 0 0 0 1px rgba(255,255,255,.22),8px 0 32px rgba(240,45,35,.09)}
+
+/* DART interactive red eyebrow sweep */
+.case-experience .eyebrow>span:before{
+  background:linear-gradient(90deg,#ff4a41 0%,rgba(240,45,35,.76) 20%,rgba(240,45,35,.34) 52%,rgba(240,45,35,.09) 76%,transparent 100%);
+  box-shadow:-2px 0 8px 1px rgba(240,45,35,.42)
+}
+.case-experience .eyebrow>span:after{
+  background:linear-gradient(90deg,transparent 0%,rgba(255,83,74,.18) 36%,#fff1f0 49%,rgba(255,83,74,.62) 55%,transparent 68%);
+  filter:drop-shadow(0 0 4px rgba(240,45,35,.68))
+}
+.case-experience .eyebrow-line:before{
+  background:linear-gradient(90deg,rgba(255,74,65,.92) 0%,rgba(240,45,35,.68) 12%,rgba(240,45,35,.34) 30%,rgba(240,45,35,.13) 50%,rgba(240,45,35,.04) 68%,rgba(240,45,35,0) 78%,rgba(240,45,35,0) 100%)
+}
+.case-experience .eyebrow-line:after{
+  background:linear-gradient(90deg,transparent 0%,rgba(255,82,73,.18) 28%,#ff8a83 43%,#fff5f4 49%,#fff5f4 51%,#ff9d97 57%,rgba(255,82,73,.18) 72%,transparent 100%);
+  filter:drop-shadow(0 0 2px rgba(240,45,35,.58))
+}
