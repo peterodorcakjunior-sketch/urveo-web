@@ -1,6 +1,7 @@
 import dartRestaurant from "./assets/dart-restaurant.webp";
 import dartDailyMenu from "./assets/dart-daily-menu.webp";
 import "./DArtHome.css";
+import useDArtPhoneEntrance from "./useDArtPhoneEntrance";
 
 function HomeIcon({ name }) {
   const paths = {
@@ -18,10 +19,11 @@ function HomeIcon({ name }) {
 
 /** Home screen for the existing local-only ordering demo; no account or order API calls. */
 export default function DArtHome({ cartCount, onMenu, onCart }) {
+  const homeRef = useDArtPhoneEntrance();
   const cartLabel = cartCount ? `Otvoriť košík, ${cartCount} položiek` : "Otvoriť košík";
   const unavailable = "Nie je súčasťou objednávkovej ukážky";
   return (
-    <section className="real-app-page real-home-page" aria-label="Domov D•ART" tabIndex="-1">
+    <section ref={homeRef} className="real-app-page real-home-page" aria-label="Domov D•ART" tabIndex="-1">
       <div className="dart-home-hero">
         <img className="dart-home-restaurant" src={dartRestaurant} width="480" height="320" alt="" decoding="async"/>
         <div className="dart-home-shade" aria-hidden="true"/>
