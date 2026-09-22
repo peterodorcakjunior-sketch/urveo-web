@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import dartRestaurant from "./assets/dart-restaurant.jpg";
+import dartRestaurant from "./assets/dart-restaurant.webp";
 import "./App.css";
 import urveoLogo from "./assets/urveo-logo.png";
 import DArtExperience from "./DArtExperience";
