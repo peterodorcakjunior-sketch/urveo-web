@@ -478,3 +478,7 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .dart-real-restaurant{background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.68)),radial-gradient(ellipse at 50% 26%,rgba(194,121,53,.38),transparent 28%),repeating-linear-gradient(90deg,transparent 0 14px,rgba(126,80,35,.28) 14px 17px),linear-gradient(155deg,#35281f,#0d0d0d 68%)}
 @media(max-width:1100px){.dart-admin{width:72%;left:10%}.dart-phone{right:8%}}
 @media(max-width:760px){.dart-admin{width:88%;height:48%;left:6%;top:16%;transform:none}.dart-phone{width:148px;height:302px;right:3%;bottom:5%;border-radius:25px}.dart-phone-screen{border-radius:21px}.dart-brand-mark{font-size:45px}.dart-brand-surface small{letter-spacing:5px}}
+
+/* Real DART restaurant photography */
+.dart-real-restaurant{background-size:cover!important;background-position:center 43%!important;background-repeat:no-repeat!important}
+.dart-real-restaurant:before{display:none}
