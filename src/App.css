@@ -493,3 +493,28 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .dart-ambient{background:rgba(240,45,35,.105);filter:blur(82px)}
 .dart-admin{box-shadow:0 42px 90px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.16),-15px -8px 62px rgba(240,45,35,.1)}
 .featured-project-copy{background:radial-gradient(circle at 20% 83%,rgba(240,45,35,.065),transparent 31%),#0d0d10}
+
+/* DART project red interaction + heading sweep */
+.projects .project-cta:hover{
+  border-color:rgba(255,105,96,.9);
+  background:linear-gradient(135deg,#ff3a31,#c91f29);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 12px 34px rgba(240,45,35,.32),0 0 30px rgba(240,45,35,.2)
+}
+.projects .project-cta:focus-visible{outline:2px solid #ff6259;outline-offset:4px}
+.featured-project:before{background:linear-gradient(110deg,transparent 35%,rgba(240,45,35,.045) 62%,transparent 82%)}
+
+.projects .eyebrow>span:before{
+  background:linear-gradient(90deg,#ff4a41 0%,rgba(240,45,35,.76) 20%,rgba(240,45,35,.34) 52%,rgba(240,45,35,.09) 76%,transparent 100%);
+  box-shadow:-2px 0 8px 1px rgba(240,45,35,.42)
+}
+.projects .eyebrow>span:after{
+  background:linear-gradient(90deg,transparent 0%,rgba(255,83,74,.18) 36%,#fff1f0 49%,rgba(255,83,74,.62) 55%,transparent 68%);
+  filter:drop-shadow(0 0 4px rgba(240,45,35,.68))
+}
+.projects .eyebrow-line:before{
+  background:linear-gradient(90deg,rgba(255,74,65,.92) 0%,rgba(240,45,35,.68) 12%,rgba(240,45,35,.34) 30%,rgba(240,45,35,.13) 50%,rgba(240,45,35,.04) 68%,rgba(240,45,35,0) 78%,rgba(240,45,35,0) 100%)
+}
+.projects .eyebrow-line:after{
+  background:linear-gradient(90deg,transparent 0%,rgba(255,82,73,.18) 28%,#ff8a83 43%,#fff5f4 49%,#fff5f4 51%,#ff9d97 57%,rgba(255,82,73,.18) 72%,transparent 100%);
+  filter:drop-shadow(0 0 2px rgba(240,45,35,.58))
+}
