@@ -94,7 +94,7 @@ function DArtMobileSurface() {
       <div className="dart-real-status"><b>{currentTime}</b><span>••• ◔ ▰</span></div>
       <div className="dart-real-nav"><strong>D<span>•</span>ART</strong><div><b>SK</b><i>EN</i><em>⌑</em></div></div>
       <div className="dart-real-hero">
-        <div className="dart-real-restaurant" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.76)), url(${dartRestaurant})` }}/>
+        <div className="dart-real-restaurant"><img src={dartRestaurant} alt="" /></div>
         <div className="dart-real-greeting"><b>Dobrý večer,</b><span>na čo máte dnes chuť?</span><i>━ • •</i></div>
       </div>
       <div className="dart-real-info">
