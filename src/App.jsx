@@ -74,27 +74,29 @@ function ProductVisual() {
 
 function DArtAdminSurface() {
   return (
-    <div className="dart-admin-surface" aria-hidden="true">
-      <div className="dart-admin-grid"/>
-      <div className="dart-admin-rail"><i/><i/><i/><i/></div>
-      <div className="dart-admin-geometry">
-        <div className="dart-abstract-heading"><i/><i/></div>
-        <div className="dart-abstract-panels"><i/><i/><i/></div>
-        <div className="dart-abstract-data"><span/><span/><span/><span/><span/></div>
-      </div>
+    <div className="dart-brand-surface" aria-hidden="true">
+      <div className="dart-brand-mark">D<span>•</span>ART</div>
+      <small>REŠTAURÁCIA</small>
     </div>
   );
 }
 
 function DArtMobileSurface() {
   return (
-    <div className="dart-mobile-surface" aria-hidden="true">
-      <div className="dart-mobile-glow"/>
-      <div className="dart-mobile-topline"><i/><i/></div>
-      <div className="dart-mobile-hero"><span/><span/></div>
-      <div className="dart-mobile-lines"><i/><i/><i/></div>
-      <div className="dart-mobile-cells"><span/><span/></div>
-      <div className="dart-mobile-dock"><i/><i/><i/></div>
+    <div className="dart-real-mobile" aria-hidden="true">
+      <div className="dart-real-status"><b>18:56</b><span>••• ◔ ▰</span></div>
+      <div className="dart-real-nav"><strong>D<span>•</span>ART</strong><div><b>SK</b><i>EN</i><em>⌑</em></div></div>
+      <div className="dart-real-hero">
+        <div className="dart-real-restaurant"/>
+        <div className="dart-real-greeting"><b>Dobrý večer, Lexo,</b><span>na čo máte dnes chuť?</span><i>━ • •</i></div>
+      </div>
+      <div className="dart-real-info">
+        <div><b>◷</b><strong>25 – 35 min</strong><small>čas prípravy</small></div>
+        <div><b>♨</b><strong>Rozvoz</strong><small>od 11:00</small></div>
+        <div><b>▣</b><strong>Balné</strong><small>0,70 € / položka</small></div>
+      </div>
+      <div className="dart-real-menu"><div><strong>DENNÉ MENU</strong><small>Pozrite si aktuálnu ponuku</small><b>Zobraziť menu</b></div><i/></div>
+      <div className="dart-real-bottom"><b>⌂<small>Domov</small></b><span>▤<small>Objednávky</small></span><span>♡<small>Obľúbené</small></span><span>⌑<small>Košík</small></span><span>♙<small>Profil</small></span></div>
     </div>
   );
 }
