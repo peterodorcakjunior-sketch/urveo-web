@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./DArtExperience.css";
 
 const pizzas = [
-  { id: 1, name: "Margherita", description: "Rajčinová omáčka, mozzarella", price: 6.7, prices: [6.7, 8.4, 8.9], tone: "margherita", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=86" },
-  { id: 2, name: "Prosciutto", description: "Rajčinová omáčka, mozzarella, šunka", price: 7.8, prices: [7.8, 9.3, 10], tone: "prosciutto", image: "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1200&q=86" },
-  { id: 3, name: "Toscana", description: "Rajčinová omáčka, mozzarella, šunka, šampiňóny", price: 8, prices: [8, 9.5, 10.2], tone: "toscana", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1200&q=86" },
-  { id: 4, name: "Cardinale", description: "Rajčinová omáčka, mozzarella, šunka, kukurica", price: 8, prices: [8, 9.5, 10.2], tone: "cardinale", image: "https://images.unsplash.com/photo-1566843972142-a7fcb70de55a?auto=format&fit=crop&w=1200&q=86" },
-  { id: 5, name: "Broccoli", description: "Rajčinová omáčka, mozzarella, brokolica, niva, kukurica", price: 8.2, prices: [8.2, 9.8, 10.5], tone: "broccoli", image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=1200&q=86" },
-  { id: 6, name: "Siciliana", description: "Rajčinová omáčka, mozzarella, sardely, olivy, kapary", price: 8.5, prices: [8.5, 10, 10.8], tone: "siciliana", image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=1200&q=86" },
+  { id: 1, name: "Margherita", description: "Rajčinová omáčka, mozzarella", price: 6.7, prices: [6.7, 8.4, 8.9], tone: "margherita", image: "/dart-pizzas/margherita.webp" },
+  { id: 2, name: "Prosciutto", description: "Rajčinová omáčka, mozzarella, šunka", price: 7.8, prices: [7.8, 9.3, 10], tone: "prosciutto", image: "/dart-pizzas/prosciutto.webp" },
+  { id: 3, name: "Toscana", description: "Rajčinová omáčka, mozzarella, šunka, šampiňóny", price: 8, prices: [8, 9.5, 10.2], tone: "toscana", image: "/dart-pizzas/toscana.webp" },
+  { id: 4, name: "Cardinale", description: "Rajčinová omáčka, mozzarella, šunka, kukurica", price: 8, prices: [8, 9.5, 10.2], tone: "cardinale", image: "/dart-pizzas/cardinale.webp" },
+  { id: 5, name: "Broccoli", description: "Rajčinová omáčka, mozzarella, brokolica, niva, kukurica", price: 8.2, prices: [8.2, 9.8, 10.5], tone: "broccoli", image: "/dart-pizzas/broccoli.webp" },
+  { id: 6, name: "Siciliana", description: "Rajčinová omáčka, mozzarella, sardely, olivy, kapary", price: 8.5, prices: [8.5, 10, 10.8], tone: "siciliana", image: "/dart-pizzas/siciliana.webp" },
 ];
 
 const sizes = [
