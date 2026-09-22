@@ -98,3 +98,11 @@
 .case-experience:focus{outline:none}
 .case-experience,.real-app-page{overscroll-behavior-y:contain}
 .case-experience button:focus-visible{outline:1px solid rgba(185,153,255,.92);outline-offset:3px;box-shadow:0 0 0 3px rgba(145,105,246,.14)}
+
+/* DART red brand theme */
+.case-experience{background:radial-gradient(circle at 72% 45%,rgba(240,45,35,.115),transparent 35%),#08080a}
+.case-glow{background:rgba(240,45,35,.085)}
+.case-context>span{color:#f04a42}
+.case-progress button.active:before,.case-progress button.done:before{background:#f02d23;box-shadow:0 0 10px rgba(240,45,35,.52)}
+.case-experience button:focus-visible{outline-color:rgba(255,92,83,.92);box-shadow:0 0 0 3px rgba(240,45,35,.14)}
+.real-phone-shell{box-shadow:0 45px 100px rgba(0,0,0,.65),inset 0 0 0 1px rgba(255,255,255,.22),8px 0 32px rgba(240,45,35,.09)}
