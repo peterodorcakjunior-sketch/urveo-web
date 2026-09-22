@@ -60,11 +60,23 @@ function AppHeader({ title, onBack, cartCount }) {
 }
 
 function PhoneFrame({ children }) {
+  const [currentTime, setCurrentTime] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setCurrentTime(new Date()), 30_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const formattedTime = new Intl.DateTimeFormat("sk-SK", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(currentTime);
+
   return (
     <div className="real-phone-shell">
       <div className="real-phone-buttons"/>
       <div className="real-phone-screen">
-        <div className="real-status"><b>18:13</b><span/><i/><em/></div>
+        <div className="real-status"><b>{formattedTime}</b><span/><i/><em/></div>
         <div className="real-island"/>
         {children}
       </div>
@@ -77,6 +89,13 @@ function Choice({ selected, onClick, children, className = "" }) {
 }
 
 export default function DArtExperience({ onClose }) {
+  const defaultSchedule = useMemo(() => {
+    const date = new Date(Date.now() + 60 * 60 * 1000);
+    return {
+      date: date.toLocaleDateString("en-CA"),
+      time: date.toTimeString().slice(0, 5),
+    };
+  }, []);
   const dialogRef = useRef(null);
   const [screen, setScreen] = useState(0);
   const [product, setProduct] = useState(pizzas[0]);
@@ -90,6 +109,9 @@ export default function DArtExperience({ onClose }) {
   const [cart, setCart] = useState([]);
   const [delivery, setDelivery] = useState("Rozvoz");
   const [timing, setTiming] = useState("Čo najskôr");
+  const [scheduledDate, setScheduledDate] = useState(defaultSchedule.date);
+  const [scheduledTime, setScheduledTime] = useState(defaultSchedule.time);
+  const [payment, setPayment] = useState("Online");
   const [location, setLocation] = useState("Trebatice");
   const [street, setStreet] = useState("365");
   const [orderNote, setOrderNote] = useState("");
@@ -109,6 +131,11 @@ export default function DArtExperience({ onClose }) {
   const packagingTotal = cartCount * 0.7;
   const deliveryPrice = delivery === "Rozvoz" ? 4 : 0;
   const grandTotal = foodTotal + packagingTotal + deliveryPrice;
+  const estimatedTime = new Date(Date.now() + 25 * 60 * 1000)
+    .toLocaleTimeString("sk-SK", { hour: "2-digit", minute: "2-digit" });
+  const scheduledLabel = scheduledDate
+    ? `${scheduledDate.split("-").reverse().join(".")} o ${scheduledTime}`
+    : scheduledTime;
 
   const selectedExtras = useMemo(
     () => Object.entries(extras).filter(([, amount]) => amount > 0).map(([name, amount]) => `${name} ${amount}×`),
@@ -228,6 +255,7 @@ export default function DArtExperience({ onClose }) {
     setSuccess(false);
     setDelivery("Rozvoz");
     setTiming("Čo najskôr");
+    setPayment("Online");
   };
 
   const checkout = () => {
@@ -442,7 +470,15 @@ export default function DArtExperience({ onClose }) {
                       </Choice>
                     ))}
                   </div>
-                  <div className="real-time-notice">◷ Odhadovaný čas doručenia: približne 18:38</div>
+                  {timing === "Predobjednávka" ? (
+                    <div className="real-preorder-fields">
+                      <label><span>Dátum</span><input type="date" min={new Date().toLocaleDateString("en-CA")} value={scheduledDate} onChange={event => setScheduledDate(event.target.value)}/></label>
+                      <label><span>Čas</span><input type="time" value={scheduledTime} onChange={event => setScheduledTime(event.target.value)}/></label>
+                      <div className="real-time-notice">◷ Objednávku pripravíme na {scheduledLabel}</div>
+                    </div>
+                  ) : (
+                    <div className="real-time-notice">◷ Odhadovaný čas doručenia: približne {estimatedTime}</div>
+                  )}
                 </div>
 
                 <div className="real-option-card">
@@ -463,10 +499,15 @@ export default function DArtExperience({ onClose }) {
 
                 <div className="real-option-card">
                   <h4>Spôsob platby</h4>
-                  <Choice className="real-payment-choice" selected onClick={() => {}}>
-                    <b>▣</b><span>Zaplatiť online</span><strong>✓</strong>
-                  </Choice>
-                  <div className="real-payment-logos"><small>Podporované online platby</small><span>tatrapay+</span><b>VISA</b><b>●●</b><b>Pay</b><b>G Pay</b></div>
+                  <div className="real-payment-list">
+                    <Choice className="real-payment-choice" selected={payment === "Online"} onClick={() => setPayment("Online")}>
+                      <b>▣</b><span>Zaplatiť online</span><strong>{payment === "Online" ? "✓" : ""}</strong>
+                    </Choice>
+                    <Choice className="real-payment-choice" selected={payment === "Hotovosť"} onClick={() => setPayment("Hotovosť")}>
+                      <b>€</b><span>Zaplatiť v hotovosti</span><strong>{payment === "Hotovosť" ? "✓" : ""}</strong>
+                    </Choice>
+                  </div>
+                  {payment === "Online" && <div className="real-payment-logos"><small>Podporované online platby</small><span>tatrapay+</span><b>VISA</b><b>●●</b><b>Pay</b><b>G Pay</b></div>}
                 </div>
 
                 <div className="real-option-card">
@@ -479,11 +520,13 @@ export default function DArtExperience({ onClose }) {
                   <p><span>Jedlo</span><b>{money(foodTotal)}</b></p>
                   <p><span>Balné</span><b>{money(packagingTotal)}</b></p>
                   <p><span>Dovoz</span><b>{money(deliveryPrice)}</b></p>
+                  <p><span>Termín</span><b>{timing === "Predobjednávka" ? scheduledLabel : "Čo najskôr"}</b></p>
+                  <p><span>Platba</span><b>{payment}</b></p>
                   <p><strong>Spolu</strong><b>{money(grandTotal)}</b></p>
                   <p><strong>Na úhradu</strong><strong>{money(grandTotal)}</strong></p>
                 </div>
 
-                <div className="real-sticky-action"><button type="button" onClick={checkout}>Prejsť na platbu · {money(grandTotal)}</button></div>
+                <div className="real-sticky-action"><button type="button" onClick={checkout}>{payment === "Online" ? "Prejsť na platbu" : "Dokončiť objednávku"} · {money(grandTotal)}</button></div>
               </section>
             )}
 
