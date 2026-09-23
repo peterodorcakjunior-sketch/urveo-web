@@ -4,8 +4,8 @@ import "./DArtPhoneEntrance.css";
 // A home/menu/home round trip must not replay the dialog's entrance.
 // Weak references also let closed dialogs be garbage-collected.
 const enteredDialogs = new WeakSet();
-const DURATION = 720;
-const EASING = "cubic-bezier(.22, 1, .36, 1)";
+const DURATION = 1400;
+const EASING = "cubic-bezier(.42, 0, .2, 1)";
 
 /** Animate the existing showcase phone into the existing DArtExperience shell. */
 export default function useDArtPhoneEntrance() {
@@ -43,6 +43,7 @@ export default function useDArtPhoneEntrance() {
     let frame = 0;
     let timeout = 0;
     let stopped = false;
+    let viewport = null;
 
     // A decorative copy retains the preview's own CSS and container units.
     // Only transforms/opacity animate; the original photograph is not rewritten.
@@ -91,8 +92,8 @@ export default function useDArtPhoneEntrance() {
       phone.style.transformOrigin = phoneOrigin;
       phone.inert = phoneInert;
       surroundings.forEach((element, index) => { element.style.opacity = opacities[index]; });
-      window.removeEventListener("resize", finish);
-      window.visualViewport?.removeEventListener("resize", finish);
+      window.removeEventListener("resize", viewportChanged);
+      window.visualViewport?.removeEventListener("resize", viewportChanged);
       document.removeEventListener("visibilitychange", visibilityChanged);
       document.removeEventListener("keydown", keyboard, true);
       reducedMotion.removeEventListener?.("change", preferenceChanged);
@@ -109,6 +110,23 @@ export default function useDArtPhoneEntrance() {
       }
     };
     const finish = () => release(true);
+    // Locking body scroll can emit a resize without a real window resize.
+    // Do not let that notification finish the flight before it is visible.
+    const readViewport = () => ({
+      width: window.innerWidth,
+      height: window.innerHeight,
+      visualHeight: window.visualViewport?.height ?? window.innerHeight,
+      scale: window.visualViewport?.scale ?? 1,
+    });
+    const viewportChanged = () => {
+      // The first frame measures after the dialog's scroll lock has settled.
+      if (!viewport) return;
+      const next = readViewport();
+      if (Math.abs(next.width - viewport.width) > 1
+        || Math.abs(next.height - viewport.height) > 1
+        || Math.abs(next.visualHeight - viewport.visualHeight) > 1
+        || Math.abs(next.scale - viewport.scale) > .01) finish();
+    };
     const keyboard = event => { if (event.key === "Tab") finish(); };
     const visibilityChanged = () => { if (document.hidden) finish(); };
     const preferenceChanged = () => { if (reducedMotion.matches) finish(); };
@@ -120,8 +138,8 @@ export default function useDArtPhoneEntrance() {
       return animation;
     };
 
-    window.addEventListener("resize", finish);
-    window.visualViewport?.addEventListener("resize", finish);
+    window.addEventListener("resize", viewportChanged);
+    window.visualViewport?.addEventListener("resize", viewportChanged);
     document.addEventListener("visibilitychange", visibilityChanged);
     document.addEventListener("keydown", keyboard, true);
     reducedMotion.addEventListener?.("change", preferenceChanged);
@@ -130,6 +148,7 @@ export default function useDArtPhoneEntrance() {
     // The source copy covers the first frame, so the full-size phone never flashes.
     frame = window.requestAnimationFrame(() => {
       if (stopped) return;
+      viewport = readViewport();
       const to = phone.getBoundingClientRect();
       if (!to.width || !to.height) { finish(); return; }
       try {
@@ -141,11 +160,12 @@ export default function useDArtPhoneEntrance() {
           { transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})` },
           { transform: "translate(0, 0) scale(1, 1)" },
         ], { duration: DURATION, easing: EASING });
-        animate(stage, [{ opacity: 1 }, { opacity: 0 }], { delay: 130, duration: 170, easing: "ease-in-out" });
-        animate(phone, [{ opacity: 0 }, { opacity: 1 }], { delay: 100, duration: 170, easing: "ease-in-out" });
-        animate(backdrop, [{ opacity: 0 }, { opacity: 1 }], { duration: 440, easing: "ease-out" });
+        // Keep the recognisable preview visible for most of the movement.
+        animate(stage, [{ opacity: 1 }, { opacity: 0 }], { delay: 720, duration: 360, easing: "ease-in-out" });
+        animate(phone, [{ opacity: 0 }, { opacity: 1 }], { delay: 700, duration: 360, easing: "ease-in-out" });
+        animate(backdrop, [{ opacity: 0 }, { opacity: 1 }], { delay: 180, duration: 1000, easing: "ease-in-out" });
         surroundings.forEach(element => {
-          animate(element, [{ opacity: 0 }, { opacity: 1 }], { delay: 260, duration: 420, easing: "ease-out" });
+          animate(element, [{ opacity: 0 }, { opacity: 1 }], { delay: 930, duration: 470, easing: "ease-out" });
         });
         movement.finished.then(finish, finish);
         timeout = window.setTimeout(finish, DURATION + 180);
