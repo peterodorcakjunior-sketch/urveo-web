@@ -1,16 +1,42 @@
-# React + Vite
+# URVEO Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Production website for [urveo.sk](https://urveo.sk), built with React, Vite, and Cloudflare Workers + Assets.
 
-Currently, two official plugins are available:
+## Local development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+## Quality checks
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm run lint
+npm run build
+```
 
-## Expanding the Oxlint configuration
+The production build is written to `dist/`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Project structure
+
+- `src/` — React website and the interactive D•ART showcase
+- `public/` — static assets, fonts, SEO files, and security headers
+- `worker/` — Cloudflare Worker, contact form API, Turnstile verification, rate limiting, and email delivery
+- `wrangler.jsonc` — Cloudflare deployment configuration
+- `concept-01.html` and `src/concepts/concept-01/` — separate VAYREN concept; do not change unless explicitly requested
+- `URVEO_KONTEXT_PRE_LOKALNY_CODEX_2026-09-25.md` — operational context and rules for Codex
+
+## Deployment safety
+
+The production branch is `repair/production-candidate-20260903`.
+
+Do not assume that a commit or push is deployed. Always treat these as separate states:
+
+1. local repository,
+2. GitHub branch,
+3. live Cloudflare production.
+
+Do not commit, push, or deploy without explicit approval. Before any change, check the current branch, `HEAD`, and working tree. After a code change, review the diff and run lint and the production build.
+
+Secrets must remain outside Git. `.env.production`, `.dev.vars`, `.wrangler/`, `node_modules/`, and `dist/` are ignored.
