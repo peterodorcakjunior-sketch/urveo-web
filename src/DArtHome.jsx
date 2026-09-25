@@ -1,4 +1,4 @@
-import dartRestaurant from "./assets/dart-restaurant.webp";
+import dartRestaurantHd from "./assets/dart-restaurant-hd.webp";
 import dartDailyMenu from "./assets/dart-daily-menu.webp";
 import "./DArtHome.css";
 import useDArtPhoneEntrance from "./useDArtPhoneEntrance";
@@ -25,7 +25,7 @@ export default function DArtHome({ cartCount, onMenu, onCart }) {
   return (
     <section ref={homeRef} className="real-app-page real-home-page" aria-label="Domov D•ART" tabIndex="-1">
       <div className="dart-home-hero">
-        <img className="dart-home-restaurant" src={dartRestaurant} width="480" height="320" alt="" decoding="async"/>
+        <img className="dart-home-restaurant" src={dartRestaurantHd} width="1536" height="1024" alt="" decoding="async"/>
         <div className="dart-home-shade" aria-hidden="true"/>
         <header className="dart-home-header">
           <span className="dart-home-logo" aria-label="D•ART">D<span>•</span>ART</span>

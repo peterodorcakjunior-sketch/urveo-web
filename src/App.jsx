@@ -108,7 +108,7 @@ function DArtMobileSurface() {
   );
 }
 
-function DArtProductVisual() {
+function DArtProductVisual({ onOpen }) {
   return (
     <div className="dart-product-visual" aria-label="Prepojený produktový ekosystém mobilnej aplikácie, administrácie a API">
       <div className="dart-ambient"/>
@@ -117,9 +117,9 @@ function DArtProductVisual() {
         <div className="dart-admin-screen" data-dart-media="admin"><DArtAdminSurface/></div>
         <div className="dart-admin-stand" aria-hidden="true"/>
       </div>
-      <div className="dart-phone">
+      <button type="button" className="dart-phone" onClick={onOpen} aria-label="Otvoriť interaktívnu ukážku projektu D•ART">
         <div className="dart-phone-screen" data-dart-media="mobile"><DArtMobileSurface/></div>
-      </div>
+      </button>
       <span className="dart-ecosystem-label dart-label-admin">ADMIN</span>
       <span className="dart-ecosystem-label dart-label-mobile">MOBILE</span>
       <span className="dart-ecosystem-label dart-label-api">API</span>
@@ -665,7 +665,7 @@ function App() {
 
       <section className="process section" aria-labelledby="process-heading"><div className="process-intro"><p className="eyebrow"><span><i className="eyebrow-line"/></span>AKO PRACUJEME</p><h2 id="process-heading">Od prvého nápadu až po <span>spustenie.</span></h2></div><div className="process-steps">{processSteps.map(step => <article className="process-step" key={step.number}><span className="process-number">{step.number}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></article>)}</div><p className="process-note">Máte iba nápad? To stačí. <span>Zvyšok môžeme vyriešiť spolu.</span></p></section>
 
-      <section className="projects section" id="projects"><div className="project-heading"><p className="eyebrow"><span><i className="eyebrow-line"/></span>VYBRANÝ PROJEKT</p></div><article className="featured-project"><div className="featured-project-copy"><p className="project-kicker">D•ART / DIGITÁLNY PRODUKT</p><h2>D•ART</h2><p className="project-subtitle">Reštauračná platforma na mieru</p><p className="project-description">Komplexné digitálne riešenie pre reštauráciu s vlastným objednávkovým systémom. Mobilná aplikácia, objednávkový proces, administrácia a backend fungujú ako jeden prepojený produkt.</p><ul className="project-capabilities" aria-label="Schopnosti projektu"><li>Mobilná aplikácia</li><li>Objednávkový systém</li><li>Admin rozhranie</li><li>Backend &amp; API</li></ul><button className="project-cta" onClick={() => setDartOpen(true)}>Vyskúšať projekt <span aria-hidden="true"><ArrowIcon direction="northeast"/></span></button></div><DArtProductVisual/></article></section>
+      <section className="projects section" id="projects"><div className="project-heading"><p className="eyebrow"><span><i className="eyebrow-line"/></span>VYBRANÝ PROJEKT</p></div><article className="featured-project"><div className="featured-project-copy"><p className="project-kicker">D•ART / DIGITÁLNY PRODUKT</p><h2>Reštauračná platforma na mieru</h2><p className="project-description">Komplexné digitálne riešenie pre reštauráciu s vlastným objednávkovým systémom. Mobilná aplikácia, objednávkový proces, administrácia a backend fungujú ako jeden prepojený produkt.</p><ul className="project-capabilities" aria-label="Schopnosti projektu"><li>Mobilná aplikácia</li><li>Objednávkový systém</li><li>Admin rozhranie</li><li>Backend &amp; API</li></ul><button className="project-cta" onClick={() => setDartOpen(true)}>Vyskúšať projekt <span aria-hidden="true"><ArrowIcon direction="northeast"/></span></button></div><DArtProductVisual onOpen={() => setDartOpen(true)}/></article></section>
 
       <section className="about section" id="about"><div className="about-glow"/><div><p className="eyebrow"><span><i className="eyebrow-line"/></span>PREČO URVEO</p><h2>Menej hluku.<br/><span>Viac podstaty.</span></h2></div><div className="about-content"><p>Nie sme len dodávateľ. Sme partner, ktorý rozumie vášmu biznisu a pretaví jeho potenciál do digitálneho produktu.</p><div className="principles"><div><strong>01</strong><span>Premyslené do detailu</span></div><div><strong>02</strong><span>Postavené pre rast</span></div><div><strong>03</strong><span>Komunikácia bez bariér</span></div></div></div></section>
 

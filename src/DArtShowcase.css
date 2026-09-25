@@ -331,9 +331,12 @@
 .dart-real-mobile .dart-real-bottom small { font-size: 2.6cqw; line-height: 1.2; font-weight: 500; }
 .dart-real-mobile .dart-real-bottom > b small { font-weight: 800; }
 @media (max-width:760px) {
-  .dart-product-visual .dart-phone { width: 154px; height: auto; padding: 5px; border-radius: 26px; }
+  .dart-product-visual .dart-phone { width: 136px; height: auto; padding: 5px; border-radius: 26px; }
   .dart-phone .dart-phone-screen { border-radius: 21px; }
   .dart-product-visual .dart-phone::before { top: 5px; border-radius: 0 0 9px 9px; }
+}
+@media (max-width:430px) {
+  .dart-product-visual .dart-phone { width: 132px; }
 }
 
 /* Self-contained, resolution-independent icons used only by this preview. */

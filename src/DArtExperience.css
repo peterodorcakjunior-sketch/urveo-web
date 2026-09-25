@@ -20,13 +20,13 @@
 .real-phone-shell{position:relative;width:clamp(380px,27vw,416px);height:905px;padding:9px;border-radius:55px;background:linear-gradient(120deg,#929097 0%,#242327 7%,#080809 35%,#151519 78%,#747178 100%);box-shadow:0 45px 100px rgba(0,0,0,.65),inset 0 0 0 1px rgba(255,255,255,.22),8px 0 26px rgba(118,84,204,.08)}
 .real-phone-shell:after{content:"";position:absolute;inset:3px;border:1px solid rgba(255,255,255,.12);border-radius:52px;pointer-events:none}
 .real-phone-buttons{position:absolute;left:-3px;top:145px;width:3px;height:70px;border-radius:3px;background:#3b393e;box-shadow:0 92px #3b393e}
-.real-phone-screen{position:relative;width:100%;height:100%;overflow:hidden;border-radius:47px;background:#090909;color:#f8f7f8;font-family:"DM Sans",sans-serif}
+.real-phone-screen{position:relative;width:100%;height:100%;overflow:hidden;border-radius:47px;background:#090909;color:#f8f7f8;font-family:"DM Sans",sans-serif;touch-action:pan-y}
 .real-island{position:absolute;z-index:30;top:13px;left:50%;width:108px;height:29px;transform:translateX(-50%);border-radius:20px;background:#010101}
 .real-status{position:absolute;z-index:29;top:0;left:0;right:0;display:flex;align-items:center;height:57px;padding:0 21px;background:#090909}
 .real-status b{font-size:15px;font-weight:800;letter-spacing:-.2px}.real-status>span{margin-left:auto;width:18px;height:8px;background:linear-gradient(90deg,#555 16%,transparent 17% 29%,#555 30% 46%,transparent 47% 59%,#555 60% 76%,transparent 77% 89%,#555 90%);opacity:.7}
 .real-status i{width:15px;height:10px;margin-left:8px;border:2px solid #fff;border-color:#fff transparent transparent;border-radius:50%;transform:rotate(0deg)}
 .real-status em{width:24px;height:11px;margin-left:7px;border:1px solid #777;border-radius:3px;box-shadow:inset 0 0 0 2px #090909;background:#f2f2f2}
-.real-app-page{position:absolute;inset:0;overflow:auto;padding:58px 15px 86px;background:#090909;scrollbar-width:none}
+.real-app-page{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;padding:58px 15px 86px;background:#090909;scrollbar-width:none;touch-action:pan-y;-webkit-overflow-scrolling:touch}
 .real-app-page::-webkit-scrollbar{display:none}
 .real-app-header{position:sticky;z-index:20;top:-58px;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;height:74px;margin:0 -15px 8px;padding:8px 16px 0;background:rgba(9,9,9,.97);backdrop-filter:blur(12px)}
 .real-app-header>button{display:grid;place-items:center;width:34px;height:34px;border:0;background:transparent;color:#fff;font-size:36px;font-weight:300;line-height:1;cursor:pointer}

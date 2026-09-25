@@ -192,7 +192,7 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .featured-project:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 35%,rgba(146,112,248,.035) 62%,transparent 82%)}
 .featured-project-copy{padding:clamp(54px,5vw,82px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;position:relative;z-index:2}
 .project-kicker{color:#9577eb;font:500 9px Manrope,sans-serif;letter-spacing:1.8px;margin:0 0 28px}
-.featured-project-copy h2{color:var(--silver);font-size:clamp(53px,5vw,76px);font-weight:500;letter-spacing:-4px;line-height:1;margin:0}
+.featured-project-copy h2{max-width:620px;color:var(--silver);font-size:clamp(38px,4vw,62px);font-weight:500;letter-spacing:-3px;line-height:1.08;margin:0}
 .project-subtitle{color:#dedde2;font:500 clamp(18px,1.6vw,23px)/1.4 Manrope,sans-serif;letter-spacing:-.5px;margin:22px 0 0}
 .project-description{max-width:530px;color:#8c8a93;font-size:14px;line-height:1.8;margin:26px 0 0}
 .project-capabilities{display:flex;flex-wrap:wrap;gap:9px;list-style:none;padding:0;margin:35px 0 0}
@@ -218,7 +218,10 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .dart-admin-geometry{position:absolute;inset:14% 7% 10% 15%}.dart-abstract-heading{display:flex;flex-direction:column;gap:8px}.dart-abstract-heading i{width:29%;height:5px;background:rgba(255,255,255,.16);border-radius:4px}.dart-abstract-heading i+ i{width:18%;height:2px;background:rgba(255,255,255,.07)}
 .dart-abstract-panels{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:9px;margin-top:13%}.dart-abstract-panels i{height:42px;border:1px solid rgba(255,255,255,.055);background:linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,.006))}.dart-abstract-panels i:first-child{border-top-color:rgba(159,124,246,.22)}
 .dart-abstract-data{position:absolute;inset:auto 0 0;height:31%;border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:flex-end;gap:7px;padding:12px 4% 0}.dart-abstract-data:before{content:"";position:absolute;inset:22% 3% 28%;border-top:1px solid rgba(164,129,249,.2);transform:skewY(-7deg);filter:drop-shadow(0 0 5px rgba(146,112,248,.25))}.dart-abstract-data span{flex:1;height:18%;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.025),transparent)}.dart-abstract-data span:nth-child(2){height:34%}.dart-abstract-data span:nth-child(3){height:27%}.dart-abstract-data span:nth-child(4){height:52%}.dart-abstract-data span:nth-child(5){height:43%}
-.dart-phone{position:absolute;width:178px;height:360px;right:5%;bottom:7%;z-index:6;padding:6px;border-radius:30px;background:linear-gradient(145deg,#827d88,#1b1a1e 22%,#040405 75%);box-shadow:20px 32px 65px rgba(0,0,0,.68),-10px -6px 34px rgba(130,87,229,.12)}
+.dart-phone{position:absolute;width:178px;height:360px;right:5%;bottom:7%;z-index:6;padding:6px;border:0;border-radius:30px;background:linear-gradient(145deg,#827d88,#1b1a1e 22%,#040405 75%);box-shadow:20px 32px 65px rgba(0,0,0,.68),-10px -6px 34px rgba(130,87,229,.12);appearance:none;text-align:initial;cursor:pointer}
+.dart-phone:focus-visible{outline:2px solid #ff6259;outline-offset:5px}
+.dart-phone{-webkit-tap-highlight-color:transparent}
+.dart-phone:active{animation:none!important;transform:translate3d(0,-2px,0) scale(.975);box-shadow:14px 22px 48px rgba(0,0,0,.72),0 0 0 2px rgba(239,41,41,.35),0 0 26px rgba(239,41,41,.2)}
 .dart-phone:before{content:"";position:absolute;z-index:3;width:39%;height:17px;left:30.5%;top:6px;border-radius:0 0 12px 12px;background:#070708}
 .dart-phone-screen{width:100%;height:100%;overflow:hidden;border-radius:24px;background:#09090c;position:relative}
 .dart-mobile-surface{position:absolute;inset:0;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.035),transparent 35%),#0a0a0d}.dart-mobile-glow{position:absolute;width:150%;aspect-ratio:1;left:-62%;top:-31%;border-radius:50%;background:radial-gradient(circle,rgba(145,104,238,.1),transparent 64%)}
@@ -231,7 +234,7 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .dart-ecosystem-label{position:absolute;z-index:7;color:#74717b;font:600 7px Manrope,sans-serif;letter-spacing:2px}.dart-label-admin{left:12%;top:15%}.dart-label-mobile{right:7%;bottom:3%}.dart-label-api{right:31%;bottom:18%}
 
 @media(max-width:1100px){.featured-project{grid-template-columns:1fr}.dart-product-visual{min-height:560px;border-left:0;border-top:1px solid rgba(255,255,255,.06)}.featured-project-copy{padding:64px}.dart-admin{width:72%;left:12%}.dart-phone{right:11%}}
-@media(max-width:760px){.project-heading{margin-bottom:28px}.featured-project-copy{padding:43px 25px 48px}.featured-project-copy h2{font-size:54px;letter-spacing:-3px}.project-description{font-size:13px}.project-capabilities{gap:7px;margin-top:28px}.project-cta{margin-top:34px}.dart-product-visual{min-height:430px}.dart-admin{width:88%;height:48%;left:6%;top:16%;transform:none}.dart-phone{width:134px;height:276px;right:5%;bottom:6%;border-radius:23px}.dart-phone-screen{border-radius:19px}.dart-label-admin{left:7%;top:11%}.dart-label-mobile{right:6%;bottom:2%}.dart-label-api{right:34%;bottom:17%}.dart-connection{right:15%;bottom:23%}}
+@media(max-width:760px){.project-heading{margin-bottom:28px}.featured-project-copy{padding:43px 25px 48px}.featured-project-copy h2{font-size:clamp(36px,10.8vw,48px);letter-spacing:-2.4px;line-height:1.08}.project-description{font-size:13px}.project-capabilities{gap:7px;margin-top:28px}.project-cta{margin-top:34px}}
 
 @media(prefers-reduced-motion:no-preference){.projects.is-visible .project-capabilities li:before{animation:dart-accent-sweep 1.4s cubic-bezier(.22,1,.36,1) both}.projects.is-visible .project-capabilities li:nth-child(2):before{animation-delay:.08s}.projects.is-visible .project-capabilities li:nth-child(3):before{animation-delay:.16s}.projects.is-visible .project-capabilities li:nth-child(4):before{animation-delay:.24s}.project-capabilities li{position:relative;overflow:hidden}.project-capabilities li:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 25%,rgba(169,112,255,.16) 50%,transparent 75%);transform:translateX(-120%)}}
 @keyframes dart-accent-sweep{to{transform:translateX(120%)}}
@@ -381,8 +384,6 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
   .window-bar>span{max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .service-card{padding-inline:22px}
   .project-capabilities li{padding:9px 11px}
-  .dart-product-visual{min-height:400px}
-  .dart-phone{width:122px;height:252px}
   .principles div{gap:18px}
   .contact{gap:52px;padding-top:88px;padding-bottom:92px}
   .contact-success{min-height:360px}
@@ -477,8 +478,6 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .project-capabilities li:before{background:linear-gradient(100deg,transparent 25%,rgba(239,41,41,.14) 50%,transparent 75%)}
 .dart-real-restaurant{background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.68)),radial-gradient(ellipse at 50% 26%,rgba(194,121,53,.38),transparent 28%),repeating-linear-gradient(90deg,transparent 0 14px,rgba(126,80,35,.28) 14px 17px),linear-gradient(155deg,#35281f,#0d0d0d 68%)}
 @media(max-width:1100px){.dart-admin{width:72%;left:10%}.dart-phone{right:8%}}
-@media(max-width:760px){.dart-admin{width:88%;height:48%;left:6%;top:16%;transform:none}.dart-phone{width:148px;height:302px;right:3%;bottom:5%;border-radius:25px}.dart-phone-screen{border-radius:21px}.dart-brand-mark{font-size:45px}.dart-brand-surface small{letter-spacing:5px}}
-
 /* Real DART restaurant photography */
 .dart-real-restaurant{background-size:cover!important;background-position:center 43%!important;background-repeat:no-repeat!important}
 .dart-real-restaurant:before{display:none}
@@ -517,4 +516,46 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .projects .eyebrow-line:after{
   background:linear-gradient(90deg,transparent 0%,rgba(255,82,73,.18) 28%,#ff8a83 43%,#fff5f4 49%,#fff5f4 51%,#ff9d97 57%,rgba(255,82,73,.18) 72%,transparent 100%);
   filter:drop-shadow(0 0 2px rgba(240,45,35,.58))
+}
+
+/* Mobile D•ART composition: keep the monitor readable and let the phone sit below it. */
+@media(max-width:760px){
+  .projects{padding-bottom:64px}
+  .dart-product-visual{min-height:510px}
+  .dart-admin{width:92%;height:36%;left:4%;top:7%}
+  .dart-brand-surface{padding-right:0;transform:none}
+  .dart-brand-mark{font-size:52px;letter-spacing:-3px}
+  .dart-brand-surface small{letter-spacing:6px}
+  .dart-label-admin{left:6%;top:4%}
+  .dart-label-mobile{right:5%;bottom:1.5%}
+  .dart-phone{right:4%;bottom:3%}
+}
+
+@media(prefers-reduced-motion:no-preference){
+  .dart-product-visual:before{animation:dart-orbit-outer 15s ease-in-out infinite alternate}
+  .dart-product-visual:after{animation:dart-orbit-inner 11s ease-in-out infinite alternate-reverse}
+  .dart-product-visual .dart-phone{animation:dart-phone-alive 5.5s ease-in-out infinite}
+  .dart-product-visual .dart-real-restaurant img{animation:dart-scene-alive 13s ease-in-out infinite alternate}
+  .dart-product-visual .dart-real-greeting i{animation:dart-dots-alive 2.8s ease-in-out infinite}
+}
+
+@keyframes dart-orbit-outer{
+  from{transform:translate(-48%,-50%) rotate(-3deg) scale(.97);opacity:.62}
+  to{transform:translate(-48%,-50%) rotate(8deg) scale(1.06);opacity:1}
+}
+@keyframes dart-orbit-inner{
+  from{transform:translate(-48%,-50%) rotate(5deg) scale(1.05);opacity:.48}
+  to{transform:translate(-48%,-50%) rotate(-7deg) scale(.94);opacity:.9}
+}
+@keyframes dart-phone-alive{
+  0%,100%{transform:translate3d(0,0,0) rotate(.15deg)}
+  50%{transform:translate3d(0,-7px,0) rotate(-.35deg)}
+}
+@keyframes dart-scene-alive{
+  from{transform:scale(1.01);object-position:48% 48%}
+  to{transform:scale(1.075);object-position:53% 46%}
+}
+@keyframes dart-dots-alive{
+  0%,100%{opacity:.55;filter:drop-shadow(0 0 0 rgba(239,41,41,0))}
+  50%{opacity:1;filter:drop-shadow(0 0 5px rgba(239,41,41,.7))}
 }
