@@ -330,6 +330,9 @@
 .dart-real-mobile .dart-real-bottom > :nth-child(5) { --dart-nav-icon: var(--dart-icon-profile); }
 .dart-real-mobile .dart-real-bottom small { font-size: 2.6cqw; line-height: 1.2; font-weight: 500; }
 .dart-real-mobile .dart-real-bottom > b small { font-weight: 800; }
+@media (min-width:761px) and (max-width:1100px) {
+  .dart-product-visual .dart-phone { width: clamp(176px, 18vw, 200px); }
+}
 @media (max-width:760px) {
   .dart-product-visual .dart-phone { width: 136px; height: auto; padding: 5px; border-radius: 26px; }
   .dart-phone .dart-phone-screen { border-radius: 21px; }

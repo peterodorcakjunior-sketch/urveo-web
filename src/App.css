@@ -233,7 +233,7 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .dart-connection{position:absolute;z-index:5;width:25%;height:22%;right:15%;bottom:24%;border-right:1px solid rgba(157,121,246,.22);border-bottom:1px solid rgba(157,121,246,.22);border-radius:0 0 35px;transform:rotate(-9deg);filter:drop-shadow(0 0 5px rgba(146,112,248,.2))}.dart-connection i{position:absolute;width:4px;height:4px;border-radius:50%;background:#9b78f5;box-shadow:0 0 8px rgba(146,112,248,.65)}.dart-connection i:first-child{right:-2px;top:-2px}.dart-connection i:nth-child(2){right:-2px;bottom:-2px}.dart-connection i:last-child{left:-2px;bottom:-2px}
 .dart-ecosystem-label{position:absolute;z-index:7;color:#74717b;font:600 7px Manrope,sans-serif;letter-spacing:2px}.dart-label-admin{left:12%;top:15%}.dart-label-mobile{right:7%;bottom:3%}.dart-label-api{right:31%;bottom:18%}
 
-@media(max-width:1100px){.featured-project{grid-template-columns:1fr}.dart-product-visual{min-height:560px;border-left:0;border-top:1px solid rgba(255,255,255,.06)}.featured-project-copy{padding:64px}.dart-admin{width:72%;left:12%}.dart-phone{right:11%}}
+@media(max-width:1100px){.featured-project{grid-template-columns:1fr}.dart-product-visual{min-height:560px;border-left:0;border-top:1px solid rgba(255,255,255,.06)}.featured-project-copy{padding:64px}}
 @media(max-width:760px){.project-heading{margin-bottom:28px}.featured-project-copy{padding:43px 25px 48px}.featured-project-copy h2{font-size:clamp(36px,10.8vw,48px);letter-spacing:-2.4px;line-height:1.08}.project-description{font-size:13px}.project-capabilities{gap:7px;margin-top:28px}.project-cta{margin-top:34px}}
 
 @media(prefers-reduced-motion:no-preference){.projects.is-visible .project-capabilities li:before{animation:dart-accent-sweep 1.4s cubic-bezier(.22,1,.36,1) both}.projects.is-visible .project-capabilities li:nth-child(2):before{animation-delay:.08s}.projects.is-visible .project-capabilities li:nth-child(3):before{animation-delay:.16s}.projects.is-visible .project-capabilities li:nth-child(4):before{animation-delay:.24s}.project-capabilities li{position:relative;overflow:hidden}.project-capabilities li:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 25%,rgba(169,112,255,.16) 50%,transparent 75%);transform:translateX(-120%)}}
@@ -477,7 +477,6 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .project-cta:hover{box-shadow:0 16px 36px rgba(239,41,41,.3),inset 0 1px 0 rgba(255,255,255,.2)}
 .project-capabilities li:before{background:linear-gradient(100deg,transparent 25%,rgba(239,41,41,.14) 50%,transparent 75%)}
 .dart-real-restaurant{background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.68)),radial-gradient(ellipse at 50% 26%,rgba(194,121,53,.38),transparent 28%),repeating-linear-gradient(90deg,transparent 0 14px,rgba(126,80,35,.28) 14px 17px),linear-gradient(155deg,#35281f,#0d0d0d 68%)}
-@media(max-width:1100px){.dart-admin{width:72%;left:10%}.dart-phone{right:8%}}
 /* Real DART restaurant photography */
 .dart-real-restaurant{background-size:cover!important;background-position:center 43%!important;background-repeat:no-repeat!important}
 .dart-real-restaurant:before{display:none}
@@ -518,6 +517,17 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
   filter:drop-shadow(0 0 2px rgba(240,45,35,.58))
 }
 
+/* Tablet DArt composition: preserve the readable mobile hierarchy at a larger scale. */
+@media(min-width:761px) and (max-width:1100px){
+  .dart-product-visual{min-height:680px}
+  .dart-admin{width:88%;height:42%;left:6%;top:7%;transform:none}
+  .dart-brand-surface{padding-right:0;transform:none}
+  .dart-brand-mark{font-size:clamp(64px,9vw,88px);letter-spacing:-4px}
+  .dart-label-admin{left:7%;top:4%}
+  .dart-label-mobile{right:4%;bottom:1.5%}
+  .dart-phone{right:4%;bottom:2.5%}
+}
+
 /* Mobile D•ART composition: keep the monitor readable and let the phone sit below it. */
 @media(max-width:760px){
   .projects{padding-bottom:64px}
@@ -535,7 +545,6 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
   .dart-product-visual:before{animation:dart-orbit-outer 15s ease-in-out infinite alternate}
   .dart-product-visual:after{animation:dart-orbit-inner 11s ease-in-out infinite alternate-reverse}
   .dart-product-visual .dart-phone{animation:dart-phone-alive 5.5s ease-in-out infinite}
-  .dart-product-visual .dart-real-restaurant img{animation:dart-scene-alive 13s ease-in-out infinite alternate}
   .dart-product-visual .dart-real-greeting i{animation:dart-dots-alive 2.8s ease-in-out infinite}
 }
 
@@ -550,10 +559,6 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 @keyframes dart-phone-alive{
   0%,100%{transform:translate3d(0,0,0) rotate(.15deg)}
   50%{transform:translate3d(0,-7px,0) rotate(-.35deg)}
-}
-@keyframes dart-scene-alive{
-  from{transform:scale(1.01);object-position:48% 48%}
-  to{transform:scale(1.075);object-position:53% 46%}
 }
 @keyframes dart-dots-alive{
   0%,100%{opacity:.55;filter:drop-shadow(0 0 0 rgba(239,41,41,0))}
