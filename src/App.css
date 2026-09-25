@@ -438,6 +438,23 @@ footer{max-width:1384px;margin:auto;padding:70px 0 25px;display:grid;grid-templa
 .service-card>h3,.service-card>p{position:relative}
 .service-card>.card-top,.service-card>h3,.service-card>p,.service-card>a{z-index:1}
 .service-card>a{transform:none}
+
+/* Conversion and contrast refinements */
+:root{--muted:#b4b2bb;--line:rgba(255,255,255,.14)}
+.card-top>span{color:#8f8c97}
+.service-card>p{color:#bbb8c2}
+.service-card>a{color:#dedbe4;opacity:1}
+.contact-copy{color:#c4c1ca}
+.contact-details p{color:#b5b2bc}
+.contact-form-area{border-top-color:rgba(255,255,255,.26)}
+.contact-field label{color:#e0dee5}
+.contact-field input,.contact-field select,.contact-field textarea{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.035)}
+.contact-field input::placeholder,.contact-field textarea::placeholder,.contact-field select:invalid{color:#aaa7b1}
+.contact-select-wrap:after{border-color:#c7c4ce}
+.contact-privacy-notice{color:#aaa7b1}
+.contact-privacy-notice button{color:#dfdce5}
+.footer-brand p{color:#96939d}
+.footer-links small,.footer-bottom{color:#898690}
 .service-card.is-revealed .service-card-visual img,.service-card:focus-within .service-card-visual img{opacity:.78;filter:brightness(.85) blur(0);transform:scale(1.03)}
 .service-card.is-revealed .service-card-visual:after,.service-card:focus-within .service-card-visual:after{opacity:.72}
 @media(hover:hover) and (pointer:fine){
